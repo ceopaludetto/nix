@@ -39,7 +39,7 @@
 
   # Programs
   home.packages = with pkgs; [
-    neofetch
+    fastfetch
     stremio
     yaak
   ];
@@ -52,15 +52,9 @@
   programs.git.userName = "Carlos Paludetto";
   programs.git.userEmail = "ceo.paludetto@gmail.com";
   programs.git.extraConfig = {
-    core = {
-      editor = "vim";
-    };
-    init = {
-      defaultBranch = "main";
-    };
-    push = {
-      autoSetupRemote = true;
-    };
+    core.editor = "vim";
+    init.defaultBranch = "main";
+    push.autoSetupRemote = true;
   };
 
   # ZSH
