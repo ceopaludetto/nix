@@ -6,6 +6,7 @@
 }: {
   imports = [
     ./common.nix
+    ../utilities/gnome.nix
   ];
 
   # Home directory
