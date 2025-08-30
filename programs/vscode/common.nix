@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  osConfig,
   ...
 }: let
   base.extensions = with pkgs.vscode-marketplace; [
@@ -109,10 +110,14 @@
     "telemetry.telemetryLevel" = "off";
 
     # Font size
+    "chat.editor.fontFamily" = osConfig.stylix.fonts.monospace.name;
     "chat.editor.fontSize" = lib.mkForce 13.0;
+    "debug.console.fontFamily" = osConfig.stylix.fonts.monospace.name;
     "debug.console.fontSize" = lib.mkForce 13.0;
+    "editor.fontFamily" = osConfig.stylix.fonts.monospace.name;
     "editor.fontSize" = lib.mkForce 13.0;
     "markdown.preview.fontSize" = lib.mkForce 13.0;
+    "terminal.integrated.fontFamily" = osConfig.stylix.fonts.monospace.name;
     "terminal.integrated.fontSize" = lib.mkForce 13.0;
   };
 in {
@@ -158,7 +163,12 @@ in {
     base.settings
     {
       "javascript.updateImportsOnFileMove.enabled" = "never";
+      "javascript.preferences.importModuleSpecifier" = "shortest";
+      "javascript.preferences.importModuleSpecifierEnding" = "minimal";
+
       "typescript.updateImportsOnFileMove.enabled" = "never";
+      "typescript.preferences.importModuleSpecifier" = "shortest";
+      "typescript.preferences.importModuleSpecifierEnding" = "minimal";
     }
   ];
 

@@ -1,8 +1,7 @@
 {
   inputs,
-  monitors,
-  osConfig,
   pkgs,
+  system,
   ...
 }: {
   imports = [
@@ -10,22 +9,19 @@
     inputs.nixcord.homeModules.nixcord
     inputs.spicetify-nix.homeManagerModules.spicetify
 
-    ./applications/ghostty.nix
-    ./applications/nixcord.nix
-    ./applications/spicetify.nix
-    ./applications/vscode.nix
-    # ./applications/zed-editor.nix
-    ./applications/zen-browser.nix
-
-    ./utilities/dconf.nix
+    # Applications
+    ../programs/ghostty/${system.triple}.nix
+    ../programs/nixcord/${system.triple}.nix
+    ../programs/spicetify/${system.triple}.nix
+    ../programs/vscode/${system.triple}.nix
+    ../programs/zen-browser/${system.triple}.nix
   ];
-
-  # User configuration
-  home.username = "carlos";
-  home.homeDirectory = "/home/carlos";
 
   # State version
   home.stateVersion = "24.11";
+
+  # User configuration
+  home.username = "carlos";
 
   # Path
   home.sessionVariables = {
@@ -39,8 +35,14 @@
 
   # Programs
   home.packages = with pkgs; [
+    # CLIs
+    awscli2
+    bombardier
     fastfetch
-    stremio
+    flyctl
+    wget
+
+    # Programs
     yaak
   ];
 
@@ -65,6 +67,9 @@
   programs.zsh.shellAliases = {
     cat = "bat";
     ll = "ls -l";
+    # Find and Prune node_modules aliases
+    find-node-modules = "find . -name \"node_modules\" -type d -prune | xargs du -chs";
+    prune-node-modules = "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +";
   };
 
   # Starship
@@ -93,25 +98,4 @@
   # Mise
   programs.mise.enable = true;
   programs.mise.enableZshIntegration = true;
-
-  # Gnome
-  programs.gnome-shell.enable = true;
-  programs.gnome-shell.extensions = with pkgs; [
-    {package = gnomeExtensions.alphabetical-app-grid;}
-    {package = gnomeExtensions.appindicator;}
-    {package = gnomeExtensions.blur-my-shell;}
-    {package = gnomeExtensions.hide-universal-access;}
-    {package = gnomeExtensions.rounded-window-corners-reborn;}
-  ];
-
-  # GTK
-  gtk.enable = true;
-
-  # For some reason stylix does not apply icons to home manager GTK
-  gtk.iconTheme.name = osConfig.stylix.icons.dark;
-  gtk.iconTheme.package = osConfig.stylix.icons.package;
-
-  # Monitors.xml configuration
-  xdg.configFile."monitors.xml".force = true;
-  xdg.configFile."monitors.xml".source = monitors.source;
 }

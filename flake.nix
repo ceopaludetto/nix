@@ -4,6 +4,9 @@
   inputs = {
     # Nix packages
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Nix darwin
+    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     # Home manager
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -30,18 +33,32 @@
 
   outputs = inputs @ {
     nixpkgs,
-    nix-vscode-extensions,
-    stylix,
+    nix-darwin,
     ...
   }: {
-    nixosConfigurations.default = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {inherit inputs;};
-      modules = [
-        {nixpkgs.overlays = [nix-vscode-extensions.overlays.default];}
-        stylix.nixosModules.stylix
-        ./configuration.nix
-      ];
-    };
+    nixosConfigurations.default = let
+      system.triple = "x86_64-linux";
+      system.isDarwin = false;
+      system.isLinux = true;
+    in
+      nixpkgs.lib.nixosSystem {
+        system = system.triple;
+        specialArgs = {inherit inputs system;};
+        modules = [
+          ./configuration.${system.triple}.nix
+        ];
+      };
+    darwinConfigurations.default = let
+      system.triple = "aarch64-darwin";
+      system.isDarwin = true;
+      system.isLinux = false;
+    in
+      nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = {inherit inputs system;};
+        modules = [
+          ./configuration.${system.triple}.nix
+        ];
+      };
   };
 }

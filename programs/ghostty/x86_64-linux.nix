@@ -1,12 +1,8 @@
 {...}: {
-  programs.ghostty.enable = true;
-  programs.ghostty.enableZshIntegration = true;
+  imports = [
+    ./common.nix
+  ];
 
-  # Basic	settings
-  programs.ghostty.settings.shell-integration-features = "no-cursor";
-  programs.ghostty.settings.cursor-style = "underline";
-
-  # Linux specific
   programs.ghostty.settings.window-theme = "ghostty";
   programs.ghostty.settings.gtk-tabs-location = "hidden";
   programs.ghostty.settings.adw-toolbar-style = "flat";

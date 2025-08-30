@@ -2,19 +2,21 @@
   inputs,
   lib,
   pkgs,
+  system,
   ...
 }: let
   monitors.content = builtins.readFile ./assets/monitors.xml;
   monitors.source = pkgs.writeText "monitors.xml" monitors.content;
-
-  theme.name = "gruvbox-material-dark-medium";
-  theme.scheme = "dark";
 in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.home-manager.nixosModules.home-manager
+    inputs.stylix.nixosModules.stylix
+
+    ./utilities/stylix/${system.triple}.nix
   ];
 
   # State version
@@ -34,12 +36,18 @@ in {
   # Disable documentation
   documentation.nixos.enable = false;
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  # Add overlay for nix-vscode-extensions
+  nixpkgs.overlays = [inputs.nix-vscode-extensions.overlays.default];
+
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
     "qtwebengine-5.15.19"
   ];
 
-  # Bootloader.
+  # Bootloader
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -70,7 +78,7 @@ in {
   networking.hostName = "Carlos-PC";
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
+  # Set time zone.
   time.timeZone = "America/Sao_Paulo";
 
   # Select internationalisation properties.
@@ -132,9 +140,6 @@ in {
   # Configure console keymap
   console.keyMap = "us-acentos";
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   # Enable sound with pipewire.
   security.rtkit.enable = true;
   services.pulseaudio.enable = false;
@@ -145,7 +150,7 @@ in {
     pulse.enable = true;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # User account
   users.defaultUserShell = pkgs.zsh;
   users.users.carlos = {
     isNormalUser = true;
@@ -174,9 +179,6 @@ in {
   # Enable nix-ld
   programs.nix-ld.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # Environment variables
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Force Wayland
@@ -192,10 +194,6 @@ in {
     lsof
     sbctl
     vim
-    wget
-
-    # Fly.io CLI
-    flyctl
 
     # Podman
     dive
@@ -239,8 +237,8 @@ in {
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.extraSpecialArgs = {inherit inputs monitors;};
-  home-manager.users.carlos = import ./home.nix;
+  home-manager.extraSpecialArgs = {inherit inputs monitors system;};
+  home-manager.users.carlos = import ./home/${system.triple}.nix;
 
   # Fonts
   fonts.packages = with pkgs; [
@@ -251,33 +249,4 @@ in {
   systemd.tmpfiles.rules = [
     "L+ /run/gdm/.config/monitors.xml - - - - ${monitors.source}"
   ];
-
-  # Stylix
-  stylix.enable = true;
-  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/${theme.name}.yaml";
-
-  stylix.fonts.serif.name = "Open Sans";
-  stylix.fonts.serif.package = pkgs.open-sans;
-
-  stylix.fonts.sansSerif.name = "Open Sans";
-  stylix.fonts.sansSerif.package = pkgs.open-sans;
-
-  stylix.fonts.monospace.name = "MonaspiceNe Nerd Font";
-  stylix.fonts.monospace.package = pkgs.nerd-fonts.monaspace;
-
-  stylix.fonts.emoji.name = "Noto Color Emoji";
-  stylix.fonts.emoji.package = pkgs.noto-fonts-emoji;
-
-  stylix.cursor.name = "Bibata-Modern-Classic";
-  stylix.cursor.package = pkgs.bibata-cursors;
-  stylix.cursor.size = 24;
-
-  stylix.icons.enable = true;
-  stylix.icons.package = pkgs.tela-circle-icon-theme.override {colorVariants = ["yellow"];};
-  stylix.icons.dark = "Tela-circle-yellow-dark";
-  stylix.icons.light = "Tela-circle-yellow-light";
-
-  stylix.image = ./assets/wallpaper.jpg;
-
-  stylix.polarity = theme.scheme;
 }
