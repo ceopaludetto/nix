@@ -3,7 +3,8 @@
   pkgs,
   osConfig,
   ...
-}: let
+}:
+let
   base.extensions = with pkgs.vscode-marketplace; [
     # Style
     antfu.icons-carbon
@@ -120,7 +121,8 @@
     "terminal.integrated.fontFamily" = osConfig.stylix.fonts.monospace.name;
     "terminal.integrated.fontSize" = lib.mkForce 13.0;
   };
-in {
+in
+{
   programs.vscode.enable = true;
 
   programs.vscode.profiles.default.enableUpdateCheck = false;
@@ -130,7 +132,8 @@ in {
   programs.vscode.profiles.default.userSettings = base.settings;
 
   # Rust
-  programs.vscode.profiles."Rust".extensions = with pkgs.vscode-marketplace;
+  programs.vscode.profiles."Rust".extensions =
+    with pkgs.vscode-marketplace;
     lib.mkMerge [
       base.extensions
       [
@@ -153,7 +156,8 @@ in {
   ];
 
   # Typescript
-  programs.vscode.profiles."TypeScript".extensions = with pkgs.vscode-marketplace;
+  programs.vscode.profiles."TypeScript".extensions =
+    with pkgs.vscode-marketplace;
     [
       dbaeumer.vscode-eslint
     ]
@@ -173,7 +177,8 @@ in {
   ];
 
   # Nix
-  programs.vscode.profiles."Nix".extensions = with pkgs.vscode-marketplace;
+  programs.vscode.profiles."Nix".extensions =
+    with pkgs.vscode-marketplace;
     [
       jnoortheen.nix-ide
     ]
@@ -184,8 +189,7 @@ in {
     {
       "nix.enableLanguageServer" = true;
       "nix.serverPath" = "nixd";
-
-      "nix.serverSettings".nixd.formatting.command = ["alejandra"];
+      "nix.formatterPath" = "nixfmt";
 
       "[nix]"."editor.defaultFormatter" = "jnoortheen.nix-ide";
       "[nix]"."editor.formatOnSave" = true;

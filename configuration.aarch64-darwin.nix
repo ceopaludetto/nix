@@ -1,12 +1,16 @@
 {
+  config,
   inputs,
   pkgs,
   system,
   ...
-}: {
+}:
+{
   imports = [
     inputs.home-manager.darwinModules.home-manager
     inputs.stylix.darwinModules.stylix
+    inputs.nix-homebrew.darwinModules.nix-homebrew
+    inputs.brew-nix.darwinModules.default
 
     ./utilities/stylix/${system.triple}.nix
   ];
@@ -29,11 +33,16 @@
   nixpkgs.config.allowUnfree = true;
 
   # Add overlay for nix-vscode-extensions
-  nixpkgs.overlays = [inputs.nix-vscode-extensions.overlays.default];
+  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
 
   # Enable networking
   networking.hostName = "Carlos-MacBook-Pro";
-  networking.knownNetworkServices = ["Wi-Fi" "Thunderbolt Bridge" "USB 10/100/1000 LAN" "iPhone USB"];
+  networking.knownNetworkServices = [
+    "Wi-Fi"
+    "Thunderbolt Bridge"
+    "USB 10/100/1000 LAN"
+    "iPhone USB"
+  ];
 
   # Enable firewall
   networking.applicationFirewall.enable = true;
@@ -48,18 +57,25 @@
     description = "Carlos Paludetto";
   };
 
+  # Enable brew casks to be used directly as packages
+  brew-nix.enable = true;
+
   environment.systemPackages = with pkgs; [
+    # Programs
+    brewCasks.android-studio
+    brewCasks.intellij-idea
+    brewCasks.whatsapp
+    brewCasks.scroll-reverser
+
     # NixOS related
-    alejandra
     home-manager
-    nixd
   ];
 
   # Home manager
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.extraSpecialArgs = {inherit inputs system;};
+  home-manager.extraSpecialArgs = { inherit inputs system; };
   home-manager.users.carlos = import ./home/${system.triple}.nix;
 
   # Fonts
@@ -105,12 +121,27 @@
   # Allow sudo with touch id
   security.pam.services.sudo_local.enable = true;
 
+  # Install Homebrew through Nix
+  nix-homebrew.enable = true;
+  nix-homebrew.enableRosetta = true;
+
+  nix-homebrew.user = "carlos";
+
+  nix-homebrew.mutableTaps = false;
+  nix-homebrew.taps = {
+    "homebrew/homebrew-core" = inputs.homebrew-core;
+    "homebrew/homebrew-cask" = inputs.homebrew-cask;
+  };
+
   # Homebrew
   homebrew.enable = true;
-  homebrew.casks = [
-    "whatsapp"
-  ];
+  homebrew.onActivation.cleanup = "zap";
+
+  # App Store
   homebrew.masApps = {
     "craft" = 1487937127;
+    "xcode" = 497799835;
   };
+
+  homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
 }

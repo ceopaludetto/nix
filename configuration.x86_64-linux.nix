@@ -4,10 +4,12 @@
   pkgs,
   system,
   ...
-}: let
+}:
+let
   monitors.content = builtins.readFile ./assets/monitors.xml;
   monitors.source = pkgs.writeText "monitors.xml" monitors.content;
-in {
+in
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -40,7 +42,7 @@ in {
   nixpkgs.config.allowUnfree = true;
 
   # Add overlay for nix-vscode-extensions
-  nixpkgs.overlays = [inputs.nix-vscode-extensions.overlays.default];
+  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
 
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
@@ -207,10 +209,8 @@ in {
     android-studio
     resources
 
-    # NixOS related
-    alejandra
+    # Nix related
     home-manager
-    nixd
 
     # Mise needed
     python313
@@ -237,7 +237,7 @@ in {
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.extraSpecialArgs = {inherit inputs monitors system;};
+  home-manager.extraSpecialArgs = { inherit inputs monitors system; };
   home-manager.users.carlos = import ./home/${system.triple}.nix;
 
   # Fonts

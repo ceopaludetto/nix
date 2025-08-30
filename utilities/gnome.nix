@@ -1,5 +1,6 @@
-{lib, ...}:
-with lib.hm.gvariant; {
+{ lib, ... }:
+with lib.hm.gvariant;
+{
   dconf.enable = true;
 
   # Desktop configuration
@@ -30,18 +31,33 @@ with lib.hm.gvariant; {
     (mkDictionaryEntry [
       "pipeline_default"
       (mkVariant [
-        (mkDictionaryEntry ["name" (mkVariant "Default")])
+        (mkDictionaryEntry [
+          "name"
+          (mkVariant "Default")
+        ])
         (mkDictionaryEntry [
           "effects"
           (mkVariant [
             (mkVariant [
-              (mkDictionaryEntry ["type" (mkVariant "native_static_gaussian_blur")])
-              (mkDictionaryEntry ["id" (mkVariant "effect_000000000000")])
+              (mkDictionaryEntry [
+                "type"
+                (mkVariant "native_static_gaussian_blur")
+              ])
+              (mkDictionaryEntry [
+                "id"
+                (mkVariant "effect_000000000000")
+              ])
               (mkDictionaryEntry [
                 "params"
                 (mkVariant [
-                  (mkDictionaryEntry ["radius" (mkVariant 30)])
-                  (mkDictionaryEntry ["brightness" (mkVariant 0.6)])
+                  (mkDictionaryEntry [
+                    "radius"
+                    (mkVariant 30)
+                  ])
+                  (mkDictionaryEntry [
+                    "brightness"
+                    (mkVariant 0.6)
+                  ])
                 ])
               ])
             ])

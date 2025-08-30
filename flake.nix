@@ -29,36 +29,53 @@
     # Nix VSCode Extensions
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
+    # Homebrew
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    homebrew-core.url = "github:homebrew/homebrew-core";
+    homebrew-core.flake = false;
+    homebrew-cask.url = "github:homebrew/homebrew-cask";
+    homebrew-cask.flake = false;
+    # Homebrew casks
+    brew-nix.url = "github:BatteredBunny/brew-nix";
+    brew-nix.inputs.nix-darwin.follows = "nix-darwin";
+    brew-nix.inputs.brew-api.follows = "brew-api";
+    brew-nix.inputs.nixpkgs.follows = "nixpkgs";
+    brew-api.url = "github:BatteredBunny/brew-api";
+    brew-api.flake = false;
   };
 
-  outputs = inputs @ {
-    nixpkgs,
-    nix-darwin,
-    ...
-  }: {
-    nixosConfigurations.default = let
-      system.triple = "x86_64-linux";
-      system.isDarwin = false;
-      system.isLinux = true;
-    in
-      nixpkgs.lib.nixosSystem {
-        system = system.triple;
-        specialArgs = {inherit inputs system;};
-        modules = [
-          ./configuration.${system.triple}.nix
-        ];
-      };
-    darwinConfigurations.default = let
-      system.triple = "aarch64-darwin";
-      system.isDarwin = true;
-      system.isLinux = false;
-    in
-      nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = {inherit inputs system;};
-        modules = [
-          ./configuration.${system.triple}.nix
-        ];
-      };
-  };
+  outputs =
+    inputs@{
+      nixpkgs,
+      nix-darwin,
+      ...
+    }:
+    {
+      nixosConfigurations.default =
+        let
+          system.triple = "x86_64-linux";
+          system.isDarwin = false;
+          system.isLinux = true;
+        in
+        nixpkgs.lib.nixosSystem {
+          system = system.triple;
+          specialArgs = { inherit inputs system; };
+          modules = [
+            ./configuration.${system.triple}.nix
+          ];
+        };
+      darwinConfigurations.default =
+        let
+          system.triple = "aarch64-darwin";
+          system.isDarwin = true;
+          system.isLinux = false;
+        in
+        nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = { inherit inputs system; };
+          modules = [
+            ./configuration.${system.triple}.nix
+          ];
+        };
+    };
 }

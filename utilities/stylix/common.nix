@@ -1,7 +1,9 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   theme.name = "gruvbox-material-dark-medium";
   theme.scheme = "dark";
-in {
+in
+{
   stylix.enable = true;
   stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/${theme.name}.yaml";
 

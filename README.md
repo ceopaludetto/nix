@@ -1,6 +1,6 @@
 # My NixOS and NixDarwin dot files
 
-Flake based configuration of NixOS and NixDarwin (WIP).
+Flake based configuration of NixOS and NixDarwin.
 
 ## Theming
 

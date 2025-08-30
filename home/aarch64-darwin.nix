@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ lib, pkgs, ... }:
+{
   imports = [
     ./common.nix
   ];
@@ -10,7 +11,18 @@
     rectangle
     raycast
     betterdisplay
+
+    # CLIs
+    podman
+    podman-compose
   ];
 
-  # TODO: Fix Ghostty, Jetbrains Toolbox, Scroll Reverser, Podman, Xcode
+  # Add Homebrew binaries to PATH
+  programs.zsh.initContent =
+    let
+      script = lib.mkOrder 1000 "eval \"$(/opt/homebrew/bin/brew shellenv)\"";
+    in
+    lib.mkMerge [
+      script
+    ];
 }

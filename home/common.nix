@@ -3,7 +3,8 @@
   pkgs,
   system,
   ...
-}: {
+}:
+{
   imports = [
     inputs.zen-browser.homeModules.beta
     inputs.nixcord.homeModules.nixcord
@@ -42,6 +43,10 @@
     flyctl
     wget
 
+    # Nix related
+    nixfmt
+    nixd
+
     # Programs
     yaak
   ];
@@ -62,8 +67,11 @@
   # ZSH
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
+  programs.zsh.autocd = true;
+
   programs.zsh.autosuggestion.enable = true;
   programs.zsh.syntaxHighlighting.enable = true;
+
   programs.zsh.shellAliases = {
     cat = "bat";
     ll = "ls -l";
@@ -86,7 +94,7 @@
 
     custom.git_email.style = "208";
     custom.git_email.command = "echo $(git config user.email)";
-    custom.git_email.detect_folders = [".git"];
+    custom.git_email.detect_folders = [ ".git" ];
     custom.git_email.symbol = "";
     custom.git_email.format = "with [$symbol $output]($style)";
     custom.git_email.ignore_timeout = true;

@@ -3,7 +3,8 @@
   osConfig,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     ./common.nix
     ../utilities/gnome.nix
@@ -15,11 +16,11 @@
   # Gnome
   programs.gnome-shell.enable = true;
   programs.gnome-shell.extensions = with pkgs; [
-    {package = gnomeExtensions.alphabetical-app-grid;}
-    {package = gnomeExtensions.appindicator;}
-    {package = gnomeExtensions.blur-my-shell;}
-    {package = gnomeExtensions.hide-universal-access;}
-    {package = gnomeExtensions.rounded-window-corners-reborn;}
+    { package = gnomeExtensions.alphabetical-app-grid; }
+    { package = gnomeExtensions.appindicator; }
+    { package = gnomeExtensions.blur-my-shell; }
+    { package = gnomeExtensions.hide-universal-access; }
+    { package = gnomeExtensions.rounded-window-corners-reborn; }
   ];
 
   # GTK
