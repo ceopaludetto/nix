@@ -1,15 +1,18 @@
-{ ... }:
+{ config, lib, ... }:
 let
-  theme.base = "https://raw.githubusercontent.com/catppuccin/zen-browser/refs/heads/main/themes/Mocha/Lavender";
+  capitalize =
+    s: lib.toUpper (builtins.substring 0 1 s) + builtins.substring 1 (builtins.stringLength s) s;
+
+  theme.base = "https://raw.githubusercontent.com/catppuccin/zen-browser/refs/heads/main/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}";
 
   theme.userChrome = builtins.fetchurl {
     url = "${theme.base}/userChrome.css";
-    sha256 = "0bjz9c4r3j6hf4sp0drkyfvcpzw91y8fcgw91zljhqd41w1z1vra";
+    sha256 = "0vbcaydy5hchv56y1c17zylwv021dwbx92c7azpvbyf6djzlba22";
   };
 
   theme.userContent = builtins.fetchurl {
     url = "${theme.base}/userContent.css";
-    sha256 = "1m6n13myfq6sybj91yasp2k5v975dnryvb9q1il9ammsvllxjml1";
+    sha256 = "0jnlgkmk2mswzrwfhis9skk6a9svc995bd1a9292hy94wr2kqyi9";
   };
 in
 {

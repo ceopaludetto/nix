@@ -1,14 +1,29 @@
-{ lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib.hm.gvariant;
+let
+  image.source = ../assets/wallpaper.heic;
+  image.converted = pkgs.runCommand "wallpaper.png" { } ''
+    ${lib.getExe' pkgs.imagemagick "convert"} "${image.source}" -compress lossless $out
+  '';
+in
 {
   dconf.enable = true;
 
   # Wallpaper
-  dconf.settings."org/gnome/desktop/background".picture-uri = ../assets/wallpaper.heic;
+  dconf.settings."org/gnome/desktop/background".picture-uri = "file://${image.converted}";
+  dconf.settings."org/gnome/desktop/background".picture-uri-dark = "file://${image.converted}";
+
+  # Set catppuccin as Gnome Shell theme as well
+  dconf.settings."org/gnome/shell/extensions/user-theme".name = config.gtk.theme.name;
 
   # Desktop configuration
-  dconf.settings."org/gnome/desktop/interface".accent-color = "yellow";
   dconf.settings."org/gnome/desktop/interface".clock-show-weekday = true;
+  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   dconf.settings."org/gnome/desktop/interface".text-scaling-factor = 1.01;
   dconf.settings."org/gnome/desktop/interface".font-hinting = "full";
   dconf.settings."org/gnome/desktop/interface".font-antialiasing = "rgba";

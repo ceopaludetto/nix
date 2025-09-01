@@ -117,6 +117,6 @@
 
   # Catppuccin
   catppuccin.enable = true;
-  catppuccin.accent = "lavender";
+  catppuccin.accent = "mauve";
   catppuccin.flavor = "mocha";
 }

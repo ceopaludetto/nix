@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   # Nixcord configuration (manually themed with midnight catppuccin mocha)
 
@@ -15,6 +15,6 @@
 
   # Theme
   programs.nixcord.config.themeLinks = [
-    "https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/themes/flavors/midnight-catppuccin-mocha.theme.css"
+    "https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/themes/flavors/midnight-catppuccin-${config.catppuccin.flavor}.theme.css"
   ];
 }

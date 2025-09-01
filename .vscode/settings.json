@@ -2,17 +2,17 @@
 	"nix.serverSettings": {
 		"nixd": {
 			"nixpkgs": {
-				"expr": "import (builtins.getFlake (builtins.toString /Users/carlos/.nix)).inputs.nixpkgs { }"
+				"expr": "import (builtins.getFlake (builtins.toString ~/.nix)).inputs.nixpkgs { }"
 			},
 			"options": {
 				"nix-os": {
-					"expr": "(builtins.getFlake (builtins.toString /Users/carlos/.nix)).nixosConfigurations.default.options"
+					"expr": "(builtins.getFlake (builtins.toString ~/.nix)).nixosConfigurations.default.options"
 				},
 				"nix-darwin": {
-					"expr": "(builtins.getFlake (builtins.toString /Users/carlos/.nix)).darwinConfigurations.default.options"
+					"expr": "(builtins.getFlake (builtins.toString ~/.nix)).darwinConfigurations.default.options"
 				},
 				"home-manager": {
-					"expr": "(builtins.getFlake (builtins.toString /Users/carlos/.nix)).nixosConfigurations.default.options.home-manager.users.type.getSubOptions []"
+					"expr": "(builtins.getFlake (builtins.toString ~/.nix)).nixosConfigurations.default.options.home-manager.users.type.getSubOptions []"
 				}
 			}
 		}

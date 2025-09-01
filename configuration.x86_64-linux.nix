@@ -187,6 +187,7 @@ in
   # Environment variables
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Force Wayland
+    NIXOS_WAYLAND = "1"; # Force Wayland
     PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
   };
 
@@ -255,6 +256,6 @@ in
 
   # Catppuccin (system wide)
   catppuccin.enable = true;
-  catppuccin.accent = "lavender";
+  catppuccin.accent = "mauve";
   catppuccin.flavor = "mocha";
 }
