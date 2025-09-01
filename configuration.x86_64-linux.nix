@@ -184,6 +184,9 @@ in
   # Enable nix-ld
   programs.nix-ld.enable = true;
 
+  # Enable dconf
+  programs.dconf.enable = true;
+
   # Environment variables
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Force Wayland
