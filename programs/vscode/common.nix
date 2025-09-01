@@ -1,25 +1,31 @@
-{
-  lib,
-  pkgs,
-  osConfig,
-  ...
-}:
+{ lib, pkgs, ... }:
 let
-  base.extensions = with pkgs.vscode-marketplace; [
+  font.family = "MonaspiceNe Nerd Font";
+  font.size = 13;
+in
+rec {
+  # VScode configuration (automatically themed with catppuccin nix module)
+
+  programs.vscode.enable = true;
+
+  programs.vscode.profiles.default.enableUpdateCheck = false;
+  programs.vscode.profiles.default.enableExtensionUpdateCheck = false;
+
+  programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [
     # Style
     antfu.icons-carbon
-    usernamehw.errorlens
-    jdinhlife.gruvbox
     beardedbear.beardedicons
+    usernamehw.errorlens
     # Common
-    mikestead.dotenv
     editorconfig.editorconfig
     graphql.vscode-graphql-syntax
+    mikestead.dotenv
+    naumovs.color-highlight
     # Vim
     vscodevim.vim
   ];
 
-  base.settings = {
+  programs.vscode.profiles.default.userSettings = {
     # Vim
     "vim.leader" = "<space>";
     "vim.camelCaseMotion.enable" = true;
@@ -38,16 +44,18 @@ let
     # Security
     "security.workspace.trust.untrustedFiles" = "open";
 
+    # Chat
+    "chat.commandCenter.enabled" = false;
+
     # Workbench
     "workbench.productIconTheme" = "icons-carbon";
-    "workbench.colorTheme" = "Gruvbox Dark Medium";
     "workbench.iconTheme" = "bearded-icons";
     "workbench.settings.editor" = "json";
     "workbench.startupEditor" = "none";
     "workbench.editor.limit.enabled" = true;
     "workbench.editor.limit.value" = 10;
     "workbench.tree.indent" = 20;
-    "workbench.layoutControl.enabled" = true;
+    "workbench.layoutControl.enabled" = false;
 
     # Explorer
     "explorer.confirmDragAndDrop" = false;
@@ -110,40 +118,33 @@ let
     # Telemetry
     "telemetry.telemetryLevel" = "off";
 
-    # Font size
-    "chat.editor.fontFamily" = osConfig.stylix.fonts.monospace.name;
-    "chat.editor.fontSize" = lib.mkForce 13.0;
-    "debug.console.fontFamily" = osConfig.stylix.fonts.monospace.name;
-    "debug.console.fontSize" = lib.mkForce 13.0;
-    "editor.fontFamily" = osConfig.stylix.fonts.monospace.name;
-    "editor.fontSize" = lib.mkForce 13.0;
-    "markdown.preview.fontSize" = lib.mkForce 13.0;
-    "terminal.integrated.fontFamily" = osConfig.stylix.fonts.monospace.name;
-    "terminal.integrated.fontSize" = lib.mkForce 13.0;
+    # Font configuration
+    "markdown.preview.fontSize" = font.size;
+
+    "chat.editor.fontSize" = font.size;
+    "chat.editor.fontFamily" = font.family;
+
+    "debug.console.fontSize" = font.size;
+    "debug.console.fontFamily" = font.family;
+
+    "editor.fontSize" = font.size;
+    "editor.fontFamily" = font.family;
+
+    "terminal.integrated.fontSize" = font.size;
+    "terminal.integrated.fontFamily" = font.family;
   };
-in
-{
-  programs.vscode.enable = true;
-
-  programs.vscode.profiles.default.enableUpdateCheck = false;
-  programs.vscode.profiles.default.enableExtensionUpdateCheck = false;
-
-  programs.vscode.profiles.default.extensions = base.extensions;
-  programs.vscode.profiles.default.userSettings = base.settings;
 
   # Rust
   programs.vscode.profiles."Rust".extensions =
     with pkgs.vscode-marketplace;
-    lib.mkMerge [
-      base.extensions
-      [
-        tamasfe.even-better-toml
-        rust-lang.rust-analyzer
-      ]
-    ];
+    [
+      tamasfe.even-better-toml
+      rust-lang.rust-analyzer
+    ]
+    ++ programs.vscode.profiles.default.extensions;
 
   programs.vscode.profiles."Rust".userSettings = lib.mkMerge [
-    base.settings
+    programs.vscode.profiles.default.userSettings
     {
       # Rust
       "[rust]"."editor.defaultFormatter" = "rust-lang.rust-analyzer";
@@ -161,10 +162,10 @@ in
     [
       dbaeumer.vscode-eslint
     ]
-    ++ base.extensions;
+    ++ programs.vscode.profiles.default.extensions;
 
   programs.vscode.profiles."TypeScript".userSettings = lib.mkMerge [
-    base.settings
+    programs.vscode.profiles.default.userSettings
     {
       "javascript.updateImportsOnFileMove.enabled" = "never";
       "javascript.preferences.importModuleSpecifier" = "shortest";
@@ -182,10 +183,10 @@ in
     [
       jnoortheen.nix-ide
     ]
-    ++ base.extensions;
+    ++ programs.vscode.profiles.default.extensions;
 
   programs.vscode.profiles."Nix".userSettings = lib.mkMerge [
-    base.settings
+    programs.vscode.profiles.default.userSettings
     {
       "nix.enableLanguageServer" = true;
       "nix.serverPath" = "nixd";
@@ -196,6 +197,12 @@ in
     }
   ];
 
-  # Use custom gruvbox implementation
-  stylix.targets.vscode.enable = false;
+  # Enable catppuccin for every profile
+  catppuccin.vscode.profiles = lib.attrsets.mapAttrs (name: value: {
+    settings.workbenchMode = "minimal";
+    settings.extraBordersEnabled = true;
+
+    # Disable icons
+    icons.enable = false;
+  }) programs.vscode.profiles;
 }

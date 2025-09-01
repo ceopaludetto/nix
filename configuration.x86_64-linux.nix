@@ -11,14 +11,17 @@ let
 in
 {
   imports = [
-    # Include the results of the hardware scan.
+    # Hardware
     ./hardware-configuration.nix
 
+    # Secure Boot
     inputs.lanzaboote.nixosModules.lanzaboote
-    inputs.home-manager.nixosModules.home-manager
-    inputs.stylix.nixosModules.stylix
 
-    ./utilities/stylix/${system.triple}.nix
+    # Home Manager
+    inputs.home-manager.nixosModules.home-manager
+
+    # Catppuccin
+    inputs.catppuccin.nixosModules.catppuccin
   ];
 
   # State version
@@ -249,4 +252,9 @@ in
   systemd.tmpfiles.rules = [
     "L+ /run/gdm/.config/monitors.xml - - - - ${monitors.source}"
   ];
+
+  # Catppuccin (system wide)
+  catppuccin.enable = true;
+  catppuccin.accent = "lavender";
+  catppuccin.flavor = "mocha";
 }

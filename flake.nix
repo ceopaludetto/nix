@@ -13,35 +13,35 @@
     # Lanzaboote (secure boot support)
     lanzaboote.url = "github:nix-community/lanzaboote/v0.4.2";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
-    # Zen Browser
+    # Zen browser
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.inputs.home-manager.follows = "home-manager";
-    # Stylix
-    stylix.url = "github:nix-community/stylix";
-    stylix.inputs.nixpkgs.follows = "nixpkgs";
-    # Nixcord
+    # Nixcord (discord)
     nixcord.url = "github:kaylorben/nixcord";
     nixcord.inputs.nixpkgs.follows = "nixpkgs";
-    # Spicetify
+    # Spicetify (spotify)
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
     # Nix VSCode Extensions
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
-    # Homebrew
+    # Homebrew installation
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core.url = "github:homebrew/homebrew-core";
     homebrew-core.flake = false;
     homebrew-cask.url = "github:homebrew/homebrew-cask";
     homebrew-cask.flake = false;
-    # Homebrew casks
+    # Homebrew casks as nix packages
     brew-nix.url = "github:BatteredBunny/brew-nix";
     brew-nix.inputs.nix-darwin.follows = "nix-darwin";
     brew-nix.inputs.brew-api.follows = "brew-api";
     brew-nix.inputs.nixpkgs.follows = "nixpkgs";
     brew-api.url = "github:BatteredBunny/brew-api";
     brew-api.flake = false;
+    # Catppuccin
+    catppuccin.url = "github:catppuccin/nix";
+    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =

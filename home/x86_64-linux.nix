@@ -1,9 +1,4 @@
-{
-  monitors,
-  osConfig,
-  pkgs,
-  ...
-}:
+{ monitors, pkgs, ... }:
 {
   imports = [
     ./common.nix
@@ -25,10 +20,6 @@
 
   # GTK
   gtk.enable = true;
-
-  # For some reason stylix does not apply icons to home manager GTK
-  gtk.iconTheme.name = osConfig.stylix.icons.dark;
-  gtk.iconTheme.package = osConfig.stylix.icons.package;
 
   # Monitors.xml configuration
   xdg.configFile."monitors.xml".force = true;

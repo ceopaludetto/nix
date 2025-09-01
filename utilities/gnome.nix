@@ -3,6 +3,9 @@ with lib.hm.gvariant;
 {
   dconf.enable = true;
 
+  # Wallpaper
+  dconf.settings."org/gnome/desktop/background".picture-uri = ../assets/wallpaper.heic;
+
   # Desktop configuration
   dconf.settings."org/gnome/desktop/interface".accent-color = "yellow";
   dconf.settings."org/gnome/desktop/interface".clock-show-weekday = true;

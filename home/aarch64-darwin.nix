@@ -13,6 +13,7 @@
     betterdisplay
 
     # CLIs
+    dive
     podman
     podman-compose
   ];

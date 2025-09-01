@@ -7,12 +7,12 @@
 }:
 {
   imports = [
+    # Home Manager
     inputs.home-manager.darwinModules.home-manager
-    inputs.stylix.darwinModules.stylix
+
+    # Homebrew
     inputs.nix-homebrew.darwinModules.nix-homebrew
     inputs.brew-nix.darwinModules.default
-
-    ./utilities/stylix/${system.triple}.nix
   ];
 
   # State version
@@ -63,9 +63,10 @@
   environment.systemPackages = with pkgs; [
     # Programs
     brewCasks.android-studio
+    # brewCasks.craft
     brewCasks.intellij-idea
-    brewCasks.whatsapp
     brewCasks.scroll-reverser
+    brewCasks.whatsapp
 
     # NixOS related
     home-manager
@@ -87,6 +88,15 @@
   system.defaults.dock.autohide = true;
   system.defaults.dock.autohide-delay = 0.0;
   system.defaults.dock.magnification = true;
+  system.defaults.dock.show-recents = false;
+  system.defaults.dock.tilesize = 64;
+  system.defaults.dock.largesize = 80;
+
+  # Hot corners (disable all)
+  system.defaults.dock.wvous-tl-corner = 1;
+  system.defaults.dock.wvous-tr-corner = 1;
+  system.defaults.dock.wvous-bl-corner = 1;
+  system.defaults.dock.wvous-br-corner = 1;
 
   # Finder (show warning when changing extension)
   system.defaults.finder.FXEnableExtensionChangeWarning = false;
@@ -118,8 +128,19 @@
   system.defaults.WindowManager.EnableStandardClickToShowDesktop = false;
   system.defaults.WindowManager.StandardHideWidgets = true;
 
+  # Always expand save and print panels
+  system.defaults.NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
+  system.defaults.NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
+  system.defaults.NSGlobalDomain.PMPrintingExpandedStateForPrint = true;
+  system.defaults.NSGlobalDomain.PMPrintingExpandedStateForPrint2 = true;
+
+  # Disable default command + space (use raycast instead)
+  system.defaults.CustomUserPreferences.com.apple.symbolichotkeys."64".enabled = 0;
+
   # Allow sudo with touch id
   security.pam.services.sudo_local.enable = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
+  security.pam.services.sudo_local.reattach = true;
 
   # Install Homebrew through Nix
   nix-homebrew.enable = true;
@@ -139,9 +160,22 @@
 
   # App Store
   homebrew.masApps = {
-    "craft" = 1487937127;
     "xcode" = 497799835;
   };
 
   homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
+
+  # Pre activation script
+  system.activationScripts."preActivation".text = ''
+    if ! /usr/bin/pgrep -q oahd >/dev/null 2>&1; then
+    	echo "[+] Installing Rosetta"
+    	/usr/sbin/softwareupdate --install-rosetta --agree-to-license
+    fi
+  '';
+
+  # Post activation script
+  system.activationScripts."postActivation".text = ''
+    echo "[+] Switching Wallpaper"
+    /usr/bin/osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"${./assets/wallpaper.heic}\""
+  '';
 }

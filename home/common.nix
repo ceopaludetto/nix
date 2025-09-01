@@ -6,9 +6,17 @@
 }:
 {
   imports = [
+    # Zen Browser
     inputs.zen-browser.homeModules.beta
+
+    # Nixcord (discord)
     inputs.nixcord.homeModules.nixcord
+
+    # Spicetify (spotify)
     inputs.spicetify-nix.homeManagerModules.spicetify
+
+    # Catppuccin
+    inputs.catppuccin.homeModules.catppuccin
 
     # Applications
     ../programs/ghostty/${system.triple}.nix
@@ -106,4 +114,9 @@
   # Mise
   programs.mise.enable = true;
   programs.mise.enableZshIntegration = true;
+
+  # Catppuccin
+  catppuccin.enable = true;
+  catppuccin.accent = "lavender";
+  catppuccin.flavor = "mocha";
 }

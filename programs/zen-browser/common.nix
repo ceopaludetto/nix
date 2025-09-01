@@ -1,5 +1,20 @@
 { ... }:
+let
+  theme.base = "https://raw.githubusercontent.com/catppuccin/zen-browser/refs/heads/main/themes/Mocha/Lavender";
+
+  theme.userChrome = builtins.fetchurl {
+    url = "${theme.base}/userChrome.css";
+    sha256 = "0bjz9c4r3j6hf4sp0drkyfvcpzw91y8fcgw91zljhqd41w1z1vra";
+  };
+
+  theme.userContent = builtins.fetchurl {
+    url = "${theme.base}/userContent.css";
+    sha256 = "1m6n13myfq6sybj91yasp2k5v975dnryvb9q1il9ammsvllxjml1";
+  };
+in
 {
+  # Zen browser configuration (manually themed with catppuccin zen browser userChrome and userContent)
+
   programs.zen-browser.enable = true;
 
   # Languages
@@ -11,6 +26,10 @@
   # Profile
   programs.zen-browser.profiles.default.name = "Default";
   programs.zen-browser.profiles.default.isDefault = true;
+
+  # Theme
+  programs.zen-browser.profiles.default.userChrome = builtins.readFile theme.userChrome;
+  programs.zen-browser.profiles.default.userContent = builtins.readFile theme.userContent;
 
   # Search
   programs.zen-browser.profiles.default.search.default = "google";
@@ -63,6 +82,7 @@
       DontCheckDefaultBrowser = true;
       NoDefaultBookmarks = true;
       OfferToSaveLogins = false;
+      TranslateEnabled = false;
       EnableTrackingProtection = {
         Value = true;
         Locked = true;
@@ -85,5 +105,7 @@
     };
 
   # Set zen browser profile name to Stylix
-  stylix.targets.zen-browser.profileNames = [ "default" ];
+  # stylix.targets.zen-browser.profileNames = [ "default" ];
+
+  # TODO Check why Zen Browser is not creating spaces and installing extensions in macOS
 }

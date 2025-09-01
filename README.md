@@ -4,12 +4,10 @@ Flake based configuration of NixOS and NixDarwin.
 
 ## Theming
 
-Everything is themed using [Stylix](https://nix-community.github.io/stylix/index.html), an official and declarative way of styling Linux and macOS across programs.
-
-- Gruvbox Material Dark Medium
-- Tela Circle Icons Yellow (on Gnome)
+- Catppuccin Mocha (Lavender) 
+- Papirus Catppuccin (on Linux)
 - Monaspace Neon Nerd Font
 
 ## Wallpaper
 
-Wallpaper come from Unsplash
+Blue Distortion 2 from [Raycast Wallpapers](https://www.raycast.com/wallpapers)
