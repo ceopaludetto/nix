@@ -15,14 +15,11 @@
     # Spicetify (spotify)
     inputs.spicetify-nix.homeManagerModules.spicetify
 
-    # Catppuccin
-    inputs.catppuccin.homeModules.catppuccin
-
     # Applications
     ../programs/ghostty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
     ../programs/spicetify/${system.triple}.nix
-    ../programs/vscode/${system.triple}.nix
+    ../programs/zed/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
   ];
 
@@ -42,7 +39,6 @@
     "$ANDROID_HOME/tools"
   ];
 
-  # Programs
   home.packages = with pkgs; [
     # CLIs
     awscli2
@@ -52,11 +48,8 @@
     wget
 
     # Nix related
+    nil
     nixfmt
-    nixd
-
-    # Programs
-    yaak
   ];
 
   # Home manager manages itself
@@ -81,8 +74,12 @@
   programs.zsh.syntaxHighlighting.enable = true;
 
   programs.zsh.shellAliases = {
+    # Replace cat with bat
     cat = "bat";
-    ll = "ls -l";
+    # Replace ls/l/ll with eza
+    ls = "eza";
+    l = "eza -l";
+    ll = "eza -la";
     # Find and Prune node_modules aliases
     find-node-modules = "find . -name \"node_modules\" -type d -prune | xargs du -chs";
     prune-node-modules = "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +";
@@ -115,8 +112,19 @@
   programs.mise.enable = true;
   programs.mise.enableZshIntegration = true;
 
-  # Catppuccin
-  catppuccin.enable = true;
-  catppuccin.accent = "mauve";
-  catppuccin.flavor = "mocha";
+  # Eza
+  programs.eza.enable = true;
+  programs.eza.enableZshIntegration = true;
+
+  programs.eza.icons = "auto";
+  programs.eza.git = true;
+
+  programs.eza.extraOptions = [
+    "--color=always"
+    "--icons=never"
+    "--level=1"
+    "--group-directories-first"
+    "--dereference"
+    "--time-style=+%Y/%m/%d %H:%M"
+  ];
 }

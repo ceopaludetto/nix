@@ -1,0 +1,30 @@
+{
+	"languages": {
+		"Nix": {
+			"language_servers": ["nil", "!nixd"]
+		}
+	},
+	"lsp": {
+		"nil": {
+			"settings": {
+				"nix": {
+					"flake": {
+						"autoArchive": true,
+						"autoEvalInputs": true
+					}
+				}
+			},
+			"initialization_options": {
+				"formatting": {
+					"command": ["nixfmt", "--quiet", "--"]
+				},
+				"nix": {
+					"flake": {
+						"autoArchive": true,
+						"autoEvalInputs": true
+					}
+				}
+			}
+		}
+	}
+}

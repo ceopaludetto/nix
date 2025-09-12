@@ -13,6 +13,9 @@
     # Homebrew
     inputs.nix-homebrew.darwinModules.nix-homebrew
     inputs.brew-nix.darwinModules.default
+
+    # Stylix
+    ./utilities/stylix/${system.triple}.nix
   ];
 
   # State version
@@ -29,11 +32,11 @@
   # nix.gc.interval = "@weekly";
   nix.gc.options = "--delete-older-than 30d";
 
+  # Nix auto optimise store
+  nix.optimise.automatic = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # Add overlay for nix-vscode-extensions
-  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
 
   # Enable networking
   networking.hostName = "Carlos-MacBook-Pro";
@@ -64,8 +67,8 @@
     # Programs
     brewCasks.android-studio
     # brewCasks.craft
-    brewCasks.intellij-idea
     brewCasks.scroll-reverser
+    brewCasks.yaak
     brewCasks.whatsapp
 
     # NixOS related

@@ -1,21 +1,17 @@
-{
-  config,
-  inputs,
-  pkgs,
-  ...
-}:
+{ inputs, pkgs, ... }:
 let
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  # Spicetify configuration (manually themed with catppuccin mocha)
+  # Spicetify configuration (stylix supported)
+  programs.spicetify.enable = false; # Disable until SHA-256 is fixed
 
-  programs.spicetify.enable = true;
-
-  programs.spicetify.theme = spicePkgs.themes.catppuccin;
-  programs.spicetify.colorScheme = config.catppuccin.flavor;
+  programs.spicetify.theme = spicePkgs.themes.comfy;
+  programs.spicetify.colorScheme = "Spotify";
 
   programs.spicetify.enabledExtensions = with spicePkgs.extensions; [
     hidePodcasts
   ];
+
+  stylix.targets.spicetify.enable = false;
 }

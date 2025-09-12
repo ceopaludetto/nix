@@ -13,6 +13,11 @@
   # Home directory
   home.homeDirectory = lib.mkForce /home/carlos;
 
+	home.packages = with pkgs; [
+		# Programs
+		yaak
+	];
+
   # Gnome
   programs.gnome-shell.enable = true;
   programs.gnome-shell.extensions = with pkgs; [

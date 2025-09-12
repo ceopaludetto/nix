@@ -1,0 +1,21 @@
+system: "base16"
+name: "Vitesse Black (with zinc tailwindcss gray scale)"
+author: "Carlos Paludetto <ceo.paludetto@gmail.com>"
+variant: "dark"
+palette:
+  base00: "#121212" # ----
+  base01: "#18181B" # ---
+  base02: "#27272A" # --
+  base03: "#3F3F46" # -
+  base04: "#D4D4D8" # +
+  base05: "#F4F4F5" # ++
+  base06: "#FAFAFA" # +++
+  base07: "#ffffff" # ++++
+  base08: "#cb7676" # Red 
+  base09: "#d4976c" # Orange 
+  base0A: "#e6cc77" # Yellow
+  base0B: "#4d9375" # Green 
+  base0C: "#5eaab5" # Cyan 
+  base0D: "#6394bf" # Blue 
+  base0E: "#d9739f" # Purple 
+  base0F: "#bd976a" # Brown 

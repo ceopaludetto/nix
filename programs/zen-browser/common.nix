@@ -16,8 +16,7 @@ let
   };
 in
 {
-  # Zen browser configuration (manually themed with catppuccin zen browser userChrome and userContent)
-
+  # Zen browser configuration (stylix supported)
   programs.zen-browser.enable = true;
 
   # Languages
@@ -31,8 +30,8 @@ in
   programs.zen-browser.profiles.default.isDefault = true;
 
   # Theme
-  programs.zen-browser.profiles.default.userChrome = builtins.readFile theme.userChrome;
-  programs.zen-browser.profiles.default.userContent = builtins.readFile theme.userContent;
+  # programs.zen-browser.profiles.default.userChrome = builtins.readFile theme.userChrome;
+  # programs.zen-browser.profiles.default.userContent = builtins.readFile theme.userContent;
 
   # Search
   programs.zen-browser.profiles.default.search.default = "google";
@@ -108,7 +107,7 @@ in
     };
 
   # Set zen browser profile name to Stylix
-  # stylix.targets.zen-browser.profileNames = [ "default" ];
+  stylix.targets.zen-browser.profileNames = [ "default" ];
 
   # TODO Check why Zen Browser is not creating spaces and installing extensions in macOS
 }

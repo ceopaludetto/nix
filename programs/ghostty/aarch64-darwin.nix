@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   imports = [
     ./common.nix
@@ -9,4 +9,7 @@
 
   programs.ghostty.settings.macos-titlebar-style = "tabs";
   programs.ghostty.settings.macos-titlebar-proxy-icon = "hidden";
+
+  # Reduce the size a little in linux
+  programs.ghostty.settings.font-size = lib.mkForce 16;
 }

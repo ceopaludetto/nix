@@ -20,8 +20,8 @@ in
     # Home Manager
     inputs.home-manager.nixosModules.home-manager
 
-    # Catppuccin
-    inputs.catppuccin.nixosModules.catppuccin
+    # Stylix
+    ./utilities/stylix/${system.triple}.nix
   ];
 
   # State version
@@ -38,14 +38,14 @@ in
   nix.gc.dates = "weekly";
   nix.gc.options = "--delete-older-than 30d";
 
+  # Nix auto optimise store
+  nix.optimise.automatic = true;
+
   # Disable documentation
   documentation.nixos.enable = false;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  # Add overlay for nix-vscode-extensions
-  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
 
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
@@ -256,9 +256,4 @@ in
   systemd.tmpfiles.rules = [
     "L+ /run/gdm/.config/monitors.xml - - - - ${monitors.source}"
   ];
-
-  # Catppuccin (system wide)
-  catppuccin.enable = true;
-  catppuccin.accent = "mauve";
-  catppuccin.flavor = "mocha";
 }

@@ -30,10 +30,6 @@
     spicetify-nix.url = "github:Gerg-L/spicetify-nix";
     spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Nix VSCode Extensions
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
-    nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
-
     # Homebrew installation
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core.url = "github:homebrew/homebrew-core";
@@ -49,9 +45,9 @@
     brew-api.url = "github:BatteredBunny/brew-api";
     brew-api.flake = false;
 
-    # Catppuccin
-    catppuccin.url = "github:catppuccin/nix";
-    catppuccin.inputs.nixpkgs.follows = "nixpkgs";
+    # Stylix
+    stylix.url = "github:nix-community/stylix";
+    stylix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
