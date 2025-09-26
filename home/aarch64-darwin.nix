@@ -5,13 +5,6 @@
   ];
 
   home.packages = with pkgs; [
-    # Programs
-    iina
-    the-unarchiver
-    rectangle
-    raycast
-    betterdisplay
-
     # CLIs
     dive
     podman

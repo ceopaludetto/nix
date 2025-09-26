@@ -67,9 +67,14 @@
     # Programs
     brewCasks.android-studio
     # brewCasks.craft
+    brewCasks.betterdisplay
+    brewCasks.iina
+    brewCasks.raycast
+    brewCasks.rectangle
     brewCasks.scroll-reverser
-    brewCasks.yaak
+    brewCasks.the-unarchiver
     brewCasks.whatsapp
+    brewCasks.yaak
 
     # NixOS related
     home-manager

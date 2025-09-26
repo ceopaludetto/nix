@@ -10,6 +10,18 @@
     "nix"
     # GraphQL
     "graphql"
+    # Dart
+    "dart"
+    # TOML
+    "toml"
+    # Typst
+    "typst"
+    # SQL
+    "sql"
+    # Makefile
+    "make"
+    # Swift
+    "swift"
   ];
 
   programs.zed-editor.userSettings = {
@@ -49,5 +61,8 @@
 
     # Disable AI entirely
     disable_ai = true;
+
+    # Typst
+    lsp.tinymist.settings.exportPdf = "onSave";
   };
 }

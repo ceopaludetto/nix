@@ -83,6 +83,8 @@
     # Find and Prune node_modules aliases
     find-node-modules = "find . -name \"node_modules\" -type d -prune | xargs du -chs";
     prune-node-modules = "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +";
+    # Zed shortcut
+    zed = "zeditor";
   };
 
   # Starship
