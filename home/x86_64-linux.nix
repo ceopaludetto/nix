@@ -1,6 +1,7 @@
 {
   lib,
   monitors,
+  osConfig,
   pkgs,
   ...
 }:
@@ -35,17 +36,9 @@
   # GTK
   gtk.enable = true;
 
-  gtk.theme.name = "Colloid-Purple-Dark-Catppuccin";
-  gtk.theme.package = pkgs.colloid-gtk-theme.override {
-    themeVariants = [ "purple" ];
-    tweaks = [
-      "catppuccin"
-      "normal"
-    ];
-  };
-
-  gtk.cursorTheme.name = "Bibata-Modern-Classic";
-  gtk.cursorTheme.package = pkgs.bibata-cursors;
+  # For some reason stylix does not apply icons to home manager GTK
+  gtk.iconTheme.name = osConfig.stylix.icons.dark;
+  gtk.iconTheme.package = osConfig.stylix.icons.package;
 
   # Monitors.xml configuration
   xdg.configFile."monitors.xml".force = true;
