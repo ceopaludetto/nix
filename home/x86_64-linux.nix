@@ -13,10 +13,13 @@
   # Home directory
   home.homeDirectory = lib.mkForce /home/carlos;
 
-	home.packages = with pkgs; [
-		# Programs
-		yaak
-	];
+  home.packages = with pkgs; [
+    # Programs
+    yaak
+
+    # CLIs
+    valgrind
+  ];
 
   # Gnome
   programs.gnome-shell.enable = true;
