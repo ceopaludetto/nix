@@ -86,6 +86,14 @@ in
   networking.hostName = "Carlos-PC";
   networking.networkmanager.enable = true;
 
+	# Enabling VM bridge
+	networking.useDHCP = false;
+	networking.bridges = {
+		"br0".interfaces = [ "enp74s0" ];
+	};
+	networking.interfaces.br0.useDHCP = true;
+  networking.interfaces.enp74s0.useDHCP = true;  
+
   # Set time zone.
   time.timeZone = "America/Sao_Paulo";
 
@@ -166,11 +174,19 @@ in
     extraGroups = [
       "adbusers"
       "kvm"
-      "podman"
+			"libvirtd"
       "networkmanager"
+      "podman"
       "wheel"
     ];
   };
+
+	# SSH Server
+	services.openssh.enable = true;
+
+	# Virtualisation
+	virtualisation.libvirtd.enable = true;
+	virtualisation.libvirtd.qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
 
   # Podman
   virtualisation.containers.enable = true;
@@ -189,6 +205,12 @@ in
 
   # Enable dconf
   programs.dconf.enable = true;
+
+  # Enable localsend
+  programs.localsend.enable = true;
+
+	# Enable virtualisation manager
+	programs.virt-manager.enable = true;
 
   # Environment variables
   environment.sessionVariables = {
@@ -211,6 +233,10 @@ in
     dive
     podman-compose
 
+		# Qemu
+		qemu
+		quickemu
+
     # Required for Rust
     pkg-config
     openssl
@@ -218,6 +244,7 @@ in
     # Programs
     android-studio
     resources
+		slack
 
     # Nix related
     home-manager
