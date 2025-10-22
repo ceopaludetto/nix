@@ -1,6 +1,6 @@
 { lib, osConfig, ... }:
 {
-  programs.zed-editor.enable = true;
+  programs.zed-editor.enable = false;
 
   programs.zed-editor.extensions = [
     # Style

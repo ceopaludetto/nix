@@ -14,6 +14,11 @@
   # Home directory
   home.homeDirectory = lib.mkForce /home/carlos;
 
+	# Environment variables
+  home.sessionVariables = {
+    ANDROID_HOME = "$HOME/Android/Sdk";
+  };
+
   home.packages = with pkgs; [
     # Programs
     yaak

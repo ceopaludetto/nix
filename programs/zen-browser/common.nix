@@ -48,6 +48,11 @@ in
   programs.zen-browser.profiles.default.containers.college.color = "green";
   programs.zen-browser.profiles.default.containers.college.icon = "chill";
 
+	programs.zen-browser.profiles.default.containers.work.id = 2;
+  programs.zen-browser.profiles.default.containers.work.name = "Work";
+  programs.zen-browser.profiles.default.containers.work.color = "yellow";
+  programs.zen-browser.profiles.default.containers.work.icon = "briefcase";
+
   programs.zen-browser.profiles.default.containersForce = true;
 
   # Spaces
@@ -60,6 +65,11 @@ in
   programs.zen-browser.profiles.default.spaces.college.container = 1;
   programs.zen-browser.profiles.default.spaces.college.name = "UFABC";
   programs.zen-browser.profiles.default.spaces.college.position = 1;
+
+	programs.zen-browser.profiles.default.spaces.work.id = "f700d4a8-e760-4aa5-9ada-ddc57a73454b";
+  programs.zen-browser.profiles.default.spaces.work.container = 2;
+  programs.zen-browser.profiles.default.spaces.work.name = "Intelipost";
+  programs.zen-browser.profiles.default.spaces.work.position = 2;
 
   programs.zen-browser.profiles.default.spacesForce = true;
 

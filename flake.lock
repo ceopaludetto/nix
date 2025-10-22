@@ -420,6 +420,26 @@
         "type": "github"
       }
     },
+    "nix-vscode-extensions": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1761011896,
+        "narHash": "sha256-p6oWYhpJGIV76tJExGUFRkir29yCTUYLsnKmnhzW2C0=",
+        "owner": "nix-community",
+        "repo": "nix-vscode-extensions",
+        "rev": "0a74c6a180110ac18584780eeff31e302b0bf8a4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-vscode-extensions",
+        "type": "github"
+      }
+    },
     "nixcord": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -551,6 +571,7 @@
         "lanzaboote": "lanzaboote",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
+        "nix-vscode-extensions": "nix-vscode-extensions",
         "nixcord": "nixcord",
         "nixpkgs": "nixpkgs",
         "spicetify-nix": "spicetify-nix",
@@ -755,15 +776,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1758695347,
-        "narHash": "sha256-+x0oz1bxN9yTxgz4CazTF4vr8Wj5v16CUGH4kXK8CVo=",
-        "owner": "0xc000022070",
+        "lastModified": 1757004095,
+        "narHash": "sha256-aEet9v3t+D05LB6jE+8e+iJl+EqjXRJz6JSeppI+6aY=",
+        "owner": "benjaminkitt",
         "repo": "zen-browser-flake",
-        "rev": "fa039a704dd1d6414fd0c42bd6aa37853b3968d5",
+        "rev": "05ec7e535abf5bdd0d16b60ebf88fe1f506bb255",
         "type": "github"
       },
       "original": {
-        "owner": "0xc000022070",
+        "owner": "benjaminkitt",
         "repo": "zen-browser-flake",
         "type": "github"
       }

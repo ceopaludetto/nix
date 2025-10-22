@@ -47,6 +47,9 @@ in
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Add overlay for nix-vscode-extensions
+  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
     "qtwebengine-5.15.19"

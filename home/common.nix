@@ -19,6 +19,7 @@
     ../programs/ghostty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
     ../programs/spicetify/${system.triple}.nix
+    ../programs/vscode/${system.triple}.nix
     ../programs/zed/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
   ];
@@ -30,9 +31,6 @@
   home.username = "carlos";
 
   # Path
-  home.sessionVariables = {
-    ANDROID_HOME = "$HOME/Android/Sdk";
-  };
   home.sessionPath = [
     "$ANDROID_HOME/emulator"
     "$ANDROID_HOME/platform-tools"

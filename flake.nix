@@ -18,7 +18,7 @@
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
     # Zen browser
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    zen-browser.url = "github:benjaminkitt/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.inputs.home-manager.follows = "home-manager";
 
@@ -48,6 +48,10 @@
     # Stylix
     stylix.url = "github:nix-community/stylix";
     stylix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # VSCode
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =

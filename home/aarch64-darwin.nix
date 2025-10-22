@@ -4,6 +4,11 @@
     ./common.nix
   ];
 
+  # Environment variables
+  home.sessionVariables = {
+    ANDROID_HOME = "$HOME/Library/Android/sdk";
+  };
+
   home.packages = with pkgs; [
     # CLIs
     dive

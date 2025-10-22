@@ -38,6 +38,9 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Add overlay for nix-vscode-extensions
+  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+
   # Enable networking
   networking.hostName = "Carlos-MacBook-Pro";
   networking.knownNetworkServices = [
@@ -69,11 +72,13 @@
     # brewCasks.craft
     brewCasks.betterdisplay
     brewCasks.iina
+    brewCasks.intellij-idea
     brewCasks.raycast
     brewCasks.rectangle
     brewCasks.scroll-reverser
     brewCasks.the-unarchiver
     brewCasks.whatsapp
+		brewCasks.utm
     brewCasks.yaak
 
     # NixOS related
@@ -170,6 +175,11 @@
   homebrew.masApps = {
     "xcode" = 497799835;
   };
+
+  # Brews
+  homebrew.brews = [
+    "cocoapods"
+  ];
 
   homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
 
