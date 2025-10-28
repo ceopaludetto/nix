@@ -42,10 +42,14 @@ let
   );
 in
 {
-  home.packages = with pkgs; [
-    android.sdk
-    android-studio
-  ];
+  home.packages =
+    with pkgs;
+    [
+      android.sdk
+    ]
+    ++ lib.optionals (system.triple == "x86_64-linux") [
+      android-studio
+    ];
 
   home.file.${android.path}.source = "${android.sdk}/share/android-sdk";
 

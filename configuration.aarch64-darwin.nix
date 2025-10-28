@@ -76,9 +76,10 @@
     brewCasks.raycast
     brewCasks.rectangle
     brewCasks.scroll-reverser
+    brewCasks.slack
     brewCasks.the-unarchiver
     brewCasks.whatsapp
-		brewCasks.utm
+    brewCasks.utm
     brewCasks.yaak
 
     # NixOS related
