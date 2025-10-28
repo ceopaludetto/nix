@@ -52,6 +52,10 @@
     # VSCode
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Android
+    android.url = "github:tadfisher/android-nixpkgs/stable";
+    android.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =

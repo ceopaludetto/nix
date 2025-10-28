@@ -46,6 +46,7 @@ in
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.android_sdk.accept_license = true;
 
   # Add overlay for nix-vscode-extensions
   nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
@@ -53,6 +54,7 @@ in
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
     "qtwebengine-5.15.19"
+    "python-2.7.18.8"
   ];
 
   # Bootloader
@@ -84,15 +86,63 @@ in
 
   # Enable networking
   networking.hostName = "Carlos-PC";
-  networking.networkmanager.enable = true;
 
-	# Enabling VM bridge
-	networking.useDHCP = false;
-	networking.bridges = {
-		"br0".interfaces = [ "enp74s0" ];
-	};
-	networking.interfaces.br0.useDHCP = true;
-  networking.interfaces.enp74s0.useDHCP = true;  
+  # Enabling VM bridge
+  networking.useDHCP = false;
+  networking.bridges = {
+    "br0".interfaces = [
+      "enp74s0"
+      "wlp73s0"
+    ];
+  };
+
+  # Creating bridge
+  networking.interfaces.br0.name = "br0";
+  networking.interfaces.br0.useDHCP = true;
+
+  # Wired interface
+  networking.interfaces.enp74s0.name = "enp74s0";
+  networking.interfaces.enp74s0.useDHCP = true;
+
+  # WiFi interface
+  networking.interfaces.wlp73s0.name = "wlp73s0";
+  networking.interfaces.wlp73s0.useDHCP = true;
+
+  # NetworkManager
+  networking.networkmanager.enable = true;
+  networking.networkmanager.settings.connectivity.enabled = false;
+  networking.networkmanager.ensureProfiles.profiles = {
+    # Bridge
+    bridge.connection.id = "Bridge";
+    bridge.connection.type = "bridge";
+    bridge.connection.interface-name = "br0";
+    bridge.ipv4.method = "auto";
+
+    # Wired
+    wired.connection.id = "Wired";
+    wired.connection.type = "ethernet";
+    wired.connection.autoconnect = true;
+    wired.connection.interface-name = "enp74s0";
+    wired.connection.port-type = "bridge";
+    wired.connection.metered = 2; # 0 = UNKNOWN, 1 = YES, 2 = NO
+    wired.ipv4.method = "auto";
+    wired.ipv6.method = "auto";
+
+    # # WiFi
+    metallica.connection.id = "WiFi";
+    metallica.connection.type = "wifi";
+    metallica.connection.autoconnect = false;
+    metallica.connection.interface-name = "wlp73s0";
+    metallica.connection.port-type = "bridge";
+    metallica.connection.metered = 2; # 0 = UNKNOWN, 1 = YES, 2 = NO
+    metallica.wifi.mode = "infrastructure";
+    metallica.wifi.ssid = "Metallica";
+    metallica.wifi-security.auth-alg = "open";
+    metallica.wifi-security.key-mgmt = "wpa-psk";
+    metallica.wifi-security.psk = "ruacorreiabarbosa@#17";
+    metallica.ipv4.method = "auto";
+    metallica.ipv6.method = "auto";
+  };
 
   # Set time zone.
   time.timeZone = "America/Sao_Paulo";
@@ -173,26 +223,28 @@ in
     description = "Carlos Paludetto";
     extraGroups = [
       "adbusers"
+      "docker"
       "kvm"
-			"libvirtd"
+      "libvirtd"
       "networkmanager"
       "podman"
       "wheel"
     ];
   };
 
-	# SSH Server
-	services.openssh.enable = true;
+  # SSH Server
+  services.openssh.enable = true;
 
-	# Virtualisation
-	virtualisation.libvirtd.enable = true;
-	virtualisation.libvirtd.qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+  # Udev
+  services.udev.packages = [ pkgs.android-udev-rules ];
 
-  # Podman
+  # Virtualisation
+  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+
+  # Docker
   virtualisation.containers.enable = true;
-  virtualisation.podman.enable = true;
-  virtualisation.podman.dockerCompat = true;
-  virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
+  virtualisation.docker.enable = true;
 
   # ADB (Android Device Bridge)
   programs.adb.enable = true;
@@ -202,6 +254,23 @@ in
 
   # Enable nix-ld
   programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Necessary for JAVA + AWT (in Esprinter)
+    fontconfig
+    freetype
+    libgcc
+    libx11
+    libxext
+    libxrender
+    libxt
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXft
+    xorg.libXTrap
+    xorg.libXt
+  ];
 
   # Enable dconf
   programs.dconf.enable = true;
@@ -209,10 +278,13 @@ in
   # Enable localsend
   programs.localsend.enable = true;
 
-	# Enable virtualisation manager
-	programs.virt-manager.enable = true;
+  # Enable virtualisation manager
+  programs.virt-manager.enable = true;
 
   # Environment variables
+  environment.variables = {
+    QT_QPA_PLATFORM = "wayland;xcb"; # Force Wayland, fallback to X11
+  };
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Force Wayland
     NIXOS_WAYLAND = "1"; # Force Wayland
@@ -229,27 +301,24 @@ in
     sbctl
     vim
 
-    # Podman
-    dive
-    podman-compose
-
-		# Qemu
-		qemu
-		quickemu
+    # Qemu
+    qemu
+    qemu_kvm
 
     # Required for Rust
     pkg-config
     openssl
 
     # Programs
-    android-studio
+    jetbrains.idea-ultimate
     resources
-		slack
+    slack
 
     # Nix related
     home-manager
 
     # Mise needed
+    python2
     python313
   ];
 

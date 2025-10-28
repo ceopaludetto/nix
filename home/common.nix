@@ -22,6 +22,9 @@
     ../programs/vscode/${system.triple}.nix
     ../programs/zed/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
+
+    # Utilities
+    ../utilities/android/${system.triple}.nix
   ];
 
   # State version
@@ -29,14 +32,6 @@
 
   # User configuration
   home.username = "carlos";
-
-  # Path
-  home.sessionPath = [
-    "$ANDROID_HOME/emulator"
-    "$ANDROID_HOME/platform-tools"
-    "$ANDROID_HOME/tools"
-  ];
-
   home.packages = with pkgs; [
     # CLIs
     awscli2
@@ -62,6 +57,14 @@
     init.defaultBranch = "main";
     push.autoSetupRemote = true;
   };
+
+  # Work email on subfolder
+  programs.git.includes = [
+    {
+      condition = "gitdir:~/Documents/Projects/Intelipost/**";
+      contents.user.email = "carlos.paludetto@intelipost.com.br";
+    }
+  ];
 
   # ZSH
   programs.zsh.enable = true;
@@ -127,4 +130,7 @@
     "--dereference"
     "--time-style=+%Y/%m/%d %H:%M"
   ];
+
+  # Spotify player
+  programs.spotify-player.enable = true;
 }

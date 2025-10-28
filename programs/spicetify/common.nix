@@ -4,7 +4,7 @@ let
 in
 {
   # Spicetify configuration (stylix supported)
-  programs.spicetify.enable = false; # Disable until SHA-256 is fixed
+  programs.spicetify.enable = true;
 
   programs.spicetify.theme = spicePkgs.themes.comfy;
   programs.spicetify.colorScheme = "Spotify";
