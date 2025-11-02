@@ -6,7 +6,7 @@ in
 {
   stylix.enable = true;
 
-  stylix.base16Scheme = ../../assets/theme.yaml;
+  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-material-dark-medium.yaml";
   stylix.polarity = theme.polarity;
 
   stylix.fonts.serif.name = "Open Sans";

@@ -2,7 +2,6 @@
   config,
   inputs,
   system,
-  pkgs,
   lib,
   ...
 }:
@@ -20,6 +19,10 @@ let
       # Android 36
       build-tools-36-0-0
       platforms-android-36
+
+      # Android 35
+      build-tools-35-0-0
+      platforms-android-35
 
       # Android 34
       build-tools-34-0-0
@@ -42,14 +45,9 @@ let
   );
 in
 {
-  home.packages =
-    with pkgs;
-    [
-      android.sdk
-    ]
-    ++ lib.optionals (system.triple == "x86_64-linux") [
-      android-studio
-    ];
+  home.packages = [
+    android.sdk
+  ];
 
   home.file.${android.path}.source = "${android.sdk}/share/android-sdk";
 

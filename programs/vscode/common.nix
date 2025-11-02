@@ -1,7 +1,12 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  system,
+  ...
+}:
 rec {
   # VScode configuration (automatically themed with stylix nix module)
-  programs.vscode.enable = true;
+  programs.vscode.enable = false;
 
   programs.vscode.profiles.default.enableUpdateCheck = false;
   programs.vscode.profiles.default.enableExtensionUpdateCheck = false;
@@ -9,8 +14,8 @@ rec {
   programs.vscode.profiles.default.extensions = with pkgs.vscode-marketplace; [
     # Style
     antfu.icons-carbon
-    antfu.theme-vitesse
     beardedbear.beardedicons
+    jdinhlife.gruvbox
     usernamehw.errorlens
 
     # Common
@@ -22,107 +27,115 @@ rec {
     vscodevim.vim
   ];
 
-  programs.vscode.profiles.default.userSettings = {
-    # Vim
-    "vim.leader" = "<space>";
-    "vim.camelCaseMotion.enable" = true;
-    "vim.useSystemClipboard" = false;
-    "vim.handleKeys" = {
-      "<C-a>" = false;
-      "<C-c>" = false;
-      "<C-f>" = false;
-      "<C-p>" = false;
-      "<C-s>" = false;
-      "<C-v>" = false;
-      "<C-x>" = false;
-      "<C-z>" = false;
-    };
+  programs.vscode.profiles.default.userSettings = lib.mkMerge [
+    {
+      # Vim
+      "vim.leader" = "<space>";
+      "vim.camelCaseMotion.enable" = true;
+      "vim.useSystemClipboard" = false;
+      "vim.handleKeys" = {
+        "<C-a>" = false;
+        "<C-c>" = false;
+        "<C-f>" = false;
+        "<C-p>" = false;
+        "<C-s>" = false;
+        "<C-v>" = false;
+        "<C-x>" = false;
+        "<C-z>" = false;
+      };
 
-    # Security
-    "security.workspace.trust.untrustedFiles" = "open";
+      # Security
+      "security.workspace.trust.untrustedFiles" = "open";
 
-    # Chat
-    "chat.commandCenter.enabled" = false;
+      # Chat
+      "chat.commandCenter.enabled" = false;
 
-    # Workbench
-    "workbench.productIconTheme" = "icons-carbon";
-    "workbench.iconTheme" = "bearded-icons";
-    "workbench.settings.editor" = "json";
-    "workbench.startupEditor" = "none";
-    "workbench.editor.limit.enabled" = true;
-    "workbench.editor.limit.value" = 10;
-    "workbench.tree.indent" = 20;
-    "workbench.layoutControl.enabled" = false;
-    "workbench.colorTheme" = lib.mkForce "Vitesse Dark";
+      # Workbench
+      "workbench.productIconTheme" = "icons-carbon";
+      "workbench.iconTheme" = lib.mkForce "bearded-icons";
+      "workbench.colorTheme" = lib.mkForce "Gruvbox Dark Medium";
+      "workbench.settings.editor" = "json";
+      "workbench.startupEditor" = "none";
+      "workbench.editor.limit.enabled" = true;
+      "workbench.editor.limit.value" = 10;
+      "workbench.tree.indent" = 20;
+      "workbench.layoutControl.enabled" = false;
 
-    # Explorer
-    "explorer.confirmDragAndDrop" = false;
-    "explorer.confirmDelete" = false;
-    "explorer.confirmPasteNative" = false;
+      # Explorer
+      "explorer.confirmDragAndDrop" = false;
+      "explorer.confirmDelete" = false;
+      "explorer.confirmPasteNative" = false;
 
-    # Window
-    "window.titleBarStyle" = "custom";
-    "window.title" = "\${appName}\${separator}\${rootNameShort}";
-    "window.commandCenter" = true;
-    "window.dialogStyle" = "native";
-    "window.newWindowDimensions" = "maximized";
-    "window.zoomLevel" = 1.15;
+      # Window
+      "window.titleBarStyle" = "custom";
+      "window.title" = "\${appName}\${separator}\${rootNameShort}";
+      "window.commandCenter" = true;
+      "window.dialogStyle" = "native";
+      "window.newWindowDimensions" = "maximized";
+      "window.zoomLevel" = 1.15;
 
-    # Error lens
-    "errorLens.followCursor" = "activeLine";
-    "errorLens.messageTemplate" = "$message ($source/$code)";
-    "errorLens.messageBackgroundMode" = "message";
-    "errorLens.padding" = "2px 4px";
-    "errorLens.margin" = "1ch";
+      # Error lens
+      "errorLens.followCursor" = "activeLine";
+      "errorLens.messageTemplate" = "$message ($source/$code)";
+      "errorLens.messageBackgroundMode" = "message";
+      "errorLens.padding" = "2px 4px";
+      "errorLens.margin" = "1ch";
 
-    "extensions.ignoreRecommendations" = true;
+      "extensions.ignoreRecommendations" = true;
 
-    # Editor
-    "editor.acceptSuggestionOnEnter" = "on";
-    "editor.codeActionsOnSave" = {
-      "source.fixAll" = "explicit";
-    };
-    "editor.cursorBlinking" = "solid";
-    "editor.cursorSmoothCaretAnimation" = "on";
-    "editor.defaultColorDecorators" = "auto";
-    "editor.fontLigatures" = true;
-    "editor.inlineSuggest.enabled" = true;
-    "editor.insertSpaces" = false;
-    "editor.minimap.renderCharacters" = false;
-    "editor.rulers" = [
-      80
-      120
-    ];
-    "editor.suggest.selectionMode" = "always";
-    "editor.tabSize" = 2;
-    "editor.stickyScroll.enabled" = false;
-    "editor.quickSuggestions" = {
-      "strings" = "on";
-    };
-    "editor.bracketPairColorization.enabled" = false;
+      # Editor
+      "editor.acceptSuggestionOnEnter" = "on";
+      "editor.codeActionsOnSave" = {
+        "source.fixAll" = "explicit";
+      };
+      "editor.cursorBlinking" = "solid";
+      "editor.cursorSmoothCaretAnimation" = "on";
+      "editor.defaultColorDecorators" = "auto";
+      "editor.fontLigatures" = true;
+      "editor.inlineSuggest.enabled" = true;
+      "editor.insertSpaces" = false;
+      "editor.minimap.renderCharacters" = false;
+      "editor.rulers" = [
+        80
+        120
+      ];
+      "editor.suggest.selectionMode" = "always";
+      "editor.tabSize" = 2;
+      "editor.stickyScroll.enabled" = false;
+      "editor.quickSuggestions" = {
+        "strings" = "on";
+      };
+      "editor.bracketPairColorization.enabled" = false;
 
-    # Debug
-    "debug.toolBarLocation" = "commandCenter";
+      # Debug
+      "debug.toolBarLocation" = "commandCenter";
 
-    # Breadcrumbs
-    "breadcrumbs.enabled" = false;
+      # Breadcrumbs
+      "breadcrumbs.enabled" = false;
 
-    # Terminal
-    "terminal.integrated.cursorBlinking" = false;
-    "terminal.integrated.cursorStyle" = "underline";
-    "terminal.integrated.enableMultiLinePasteWarning" = "never";
-    "terminal.integrated.tabs.enabled" = false;
+      # Terminal
+      "terminal.integrated.cursorBlinking" = false;
+      "terminal.integrated.cursorStyle" = "underline";
+      "terminal.integrated.enableMultiLinePasteWarning" = "never";
+      "terminal.integrated.tabs.enabled" = false;
+      "terminal.integrated.stickyScroll.enabled" = false;
 
-    # Telemetry
-    "telemetry.telemetryLevel" = "off";
+      # Telemetry
+      "telemetry.telemetryLevel" = "off";
 
-    # # Font configuration
-    "markdown.preview.fontSize" = lib.mkForce 13;
-    "chat.editor.fontSize" = lib.mkForce 13;
-    "debug.console.fontSize" = lib.mkForce 13;
-    "editor.fontSize" = lib.mkForce 13;
-    "terminal.integrated.fontSize" = lib.mkForce 13;
-  };
+      # # Font configuration
+      "markdown.preview.fontSize" = lib.mkForce 13;
+      "chat.editor.fontSize" = lib.mkForce 13;
+      "debug.console.fontSize" = lib.mkForce 13;
+      "editor.fontSize" = lib.mkForce 13;
+      "terminal.integrated.fontSize" = lib.mkForce 13;
+    }
+    (lib.optionals (system.triple == "x86_64-linux") {
+      "window.menuBarVisibility" = "hidden";
+      "window.customTitleBarVisibility" = "auto";
+      "window.titleBarStyle" = lib.mkForce "native";
+    })
+  ];
 
   # Rust
   programs.vscode.profiles."Rust".extensions =
@@ -204,11 +217,11 @@ rec {
     }
   ];
 
-	# Writing
+  # Writing
   programs.vscode.profiles."Writing".extensions =
     with pkgs.vscode-marketplace;
     [
-    	myriad-dreamin.tinymist 
+      myriad-dreamin.tinymist
     ]
     ++ programs.vscode.profiles.default.extensions;
 
@@ -220,6 +233,20 @@ rec {
     }
   ];
 
-  # Enable catppuccin for every profile
+  # Vue (based on TypeScript)
+  programs.vscode.profiles."Vue".extensions =
+    with pkgs.vscode-marketplace;
+    [
+      vue.volar
+    ]
+    ++ programs.vscode.profiles."TypeScript".extensions;
+
+  programs.vscode.profiles."Vue".userSettings = lib.mkMerge [
+    programs.vscode.profiles."TypeScript".userSettings
+    {
+    }
+  ];
+
+  # Enable stylix for every profile
   stylix.targets.vscode.profileNames = builtins.attrNames programs.vscode.profiles;
 }

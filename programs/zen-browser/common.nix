@@ -1,20 +1,4 @@
-{ config, lib, ... }:
-let
-  capitalize =
-    s: lib.toUpper (builtins.substring 0 1 s) + builtins.substring 1 (builtins.stringLength s) s;
-
-  theme.base = "https://raw.githubusercontent.com/catppuccin/zen-browser/refs/heads/main/themes/${capitalize config.catppuccin.flavor}/${capitalize config.catppuccin.accent}";
-
-  theme.userChrome = builtins.fetchurl {
-    url = "${theme.base}/userChrome.css";
-    sha256 = "0vbcaydy5hchv56y1c17zylwv021dwbx92c7azpvbyf6djzlba22";
-  };
-
-  theme.userContent = builtins.fetchurl {
-    url = "${theme.base}/userContent.css";
-    sha256 = "0jnlgkmk2mswzrwfhis9skk6a9svc995bd1a9292hy94wr2kqyi9";
-  };
-in
+{ ... }:
 {
   # Zen browser configuration (stylix supported)
   programs.zen-browser.enable = true;
@@ -48,7 +32,7 @@ in
   programs.zen-browser.profiles.default.containers.college.color = "green";
   programs.zen-browser.profiles.default.containers.college.icon = "chill";
 
-	programs.zen-browser.profiles.default.containers.work.id = 2;
+  programs.zen-browser.profiles.default.containers.work.id = 2;
   programs.zen-browser.profiles.default.containers.work.name = "Work";
   programs.zen-browser.profiles.default.containers.work.color = "yellow";
   programs.zen-browser.profiles.default.containers.work.icon = "briefcase";
@@ -66,7 +50,7 @@ in
   programs.zen-browser.profiles.default.spaces.college.name = "UFABC";
   programs.zen-browser.profiles.default.spaces.college.position = 1;
 
-	programs.zen-browser.profiles.default.spaces.work.id = "f700d4a8-e760-4aa5-9ada-ddc57a73454b";
+  programs.zen-browser.profiles.default.spaces.work.id = "f700d4a8-e760-4aa5-9ada-ddc57a73454b";
   programs.zen-browser.profiles.default.spaces.work.container = 2;
   programs.zen-browser.profiles.default.spaces.work.name = "Intelipost";
   programs.zen-browser.profiles.default.spaces.work.position = 2;
@@ -118,6 +102,4 @@ in
 
   # Set zen browser profile name to Stylix
   stylix.targets.zen-browser.profileNames = [ "default" ];
-
-  # TODO Check why Zen Browser is not creating spaces and installing extensions in macOS
 }

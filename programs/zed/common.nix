@@ -1,11 +1,11 @@
 { lib, osConfig, ... }:
 {
-  programs.zed-editor.enable = false;
+  programs.zed-editor.enable = true;
 
   programs.zed-editor.extensions = [
     # Style
     "bearded-icon-theme"
-    "vitesse-theme-refined"
+    "gruvbox-material"
     # NixOS
     "nix"
     # GraphQL
@@ -29,8 +29,11 @@
     vim_mode = true;
     vim.use_system_clipboard = "never";
 
+    # Keybinds
+    base_keymap = "VSCode";
+
     # Style
-    theme = lib.mkForce "Vitesse Refined Dark";
+    theme = lib.mkForce "Gruvbox Material";
     icon_theme = lib.mkForce "Bearded Icon Theme";
 
     buffer_font_size = lib.mkForce 14;

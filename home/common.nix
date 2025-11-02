@@ -18,7 +18,6 @@
     # Applications
     ../programs/ghostty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
-    ../programs/spicetify/${system.triple}.nix
     ../programs/vscode/${system.triple}.nix
     ../programs/zed/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
@@ -50,10 +49,12 @@
 
   # Git
   programs.git.enable = true;
-  programs.git.userName = "Carlos Paludetto";
-  programs.git.userEmail = "ceo.paludetto@gmail.com";
-  programs.git.extraConfig = {
+  programs.git.settings = {
+    user.name = "Carlos Paludetto";
+    user.email = "ceo.paludetto@gmail.com";
+
     core.editor = "vim";
+
     init.defaultBranch = "main";
     push.autoSetupRemote = true;
   };

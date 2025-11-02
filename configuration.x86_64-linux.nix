@@ -5,10 +5,6 @@
   system,
   ...
 }:
-let
-  monitors.content = builtins.readFile ./assets/monitors.xml;
-  monitors.source = pkgs.writeText "monitors.xml" monitors.content;
-in
 {
   imports = [
     # Hardware
@@ -27,7 +23,9 @@ in
   # State version
   system.stateVersion = "24.11";
 
-  # Enable flakes
+  # Nix settings
+  nix.settings.auto-optimise-store = true;
+  nix.settings.warn-dirty = false;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -54,7 +52,7 @@ in
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
     "qtwebengine-5.15.19"
-    "python-2.7.18.8"
+    "python-2.7.18.12"
   ];
 
   # Bootloader
@@ -90,10 +88,7 @@ in
   # Enabling VM bridge
   networking.useDHCP = false;
   networking.bridges = {
-    "br0".interfaces = [
-      "enp74s0"
-      "wlp73s0"
-    ];
+    "br0".interfaces = [ "enp74s0" ];
   };
 
   # Creating bridge
@@ -103,46 +98,6 @@ in
   # Wired interface
   networking.interfaces.enp74s0.name = "enp74s0";
   networking.interfaces.enp74s0.useDHCP = true;
-
-  # WiFi interface
-  networking.interfaces.wlp73s0.name = "wlp73s0";
-  networking.interfaces.wlp73s0.useDHCP = true;
-
-  # NetworkManager
-  networking.networkmanager.enable = true;
-  networking.networkmanager.settings.connectivity.enabled = false;
-  networking.networkmanager.ensureProfiles.profiles = {
-    # Bridge
-    bridge.connection.id = "Bridge";
-    bridge.connection.type = "bridge";
-    bridge.connection.interface-name = "br0";
-    bridge.ipv4.method = "auto";
-
-    # Wired
-    wired.connection.id = "Wired";
-    wired.connection.type = "ethernet";
-    wired.connection.autoconnect = true;
-    wired.connection.interface-name = "enp74s0";
-    wired.connection.port-type = "bridge";
-    wired.connection.metered = 2; # 0 = UNKNOWN, 1 = YES, 2 = NO
-    wired.ipv4.method = "auto";
-    wired.ipv6.method = "auto";
-
-    # # WiFi
-    metallica.connection.id = "WiFi";
-    metallica.connection.type = "wifi";
-    metallica.connection.autoconnect = false;
-    metallica.connection.interface-name = "wlp73s0";
-    metallica.connection.port-type = "bridge";
-    metallica.connection.metered = 2; # 0 = UNKNOWN, 1 = YES, 2 = NO
-    metallica.wifi.mode = "infrastructure";
-    metallica.wifi.ssid = "Metallica";
-    metallica.wifi-security.auth-alg = "open";
-    metallica.wifi-security.key-mgmt = "wpa-psk";
-    metallica.wifi-security.psk = "ruacorreiabarbosa@#17";
-    metallica.ipv4.method = "auto";
-    metallica.ipv6.method = "auto";
-  };
 
   # Set time zone.
   time.timeZone = "America/Sao_Paulo";
@@ -194,10 +149,25 @@ in
   # Fix time in Windows
   time.hardwareClockInLocalTime = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.xserver.enable = lib.mkForce false; # Disable X11 server
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  # Disable X11 server
+  services.xserver.enable = lib.mkForce false;
+
+  # Enable hyprland
+  programs.hyprland.enable = true;
+  programs.hyprland.xwayland.enable = true;
+  programs.hyprland.withUWSM = true;
+
+  # Enable UWSM
+  programs.uwsm.enable = true;
+  programs.uwsm.waylandCompositors = {
+    hyprland.prettyName = "Hyprland";
+    hyprland.comment = "Hyprland compositor managed by UWSM";
+    hyprland.binPath = "/run/current-system/sw/bin/Hyprland";
+  };
+
+  # Configure XDG Portal
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
@@ -226,17 +196,13 @@ in
       "docker"
       "kvm"
       "libvirtd"
-      "networkmanager"
-      "podman"
       "wheel"
     ];
   };
 
-  # SSH Server
+  # SSH
+  programs.ssh.startAgent = true;
   services.openssh.enable = true;
-
-  # Udev
-  services.udev.packages = [ pkgs.android-udev-rules ];
 
   # Virtualisation
   virtualisation.libvirtd.enable = true;
@@ -271,9 +237,6 @@ in
     xorg.libXTrap
     xorg.libXt
   ];
-
-  # Enable dconf
-  programs.dconf.enable = true;
 
   # Enable localsend
   programs.localsend.enable = true;
@@ -311,7 +274,8 @@ in
 
     # Programs
     jetbrains.idea-ultimate
-    resources
+    genymotion
+    nautilus
     slack
 
     # Nix related
@@ -320,39 +284,27 @@ in
     # Mise needed
     python2
     python313
-  ];
 
-  # Exclude some gnome applications
-  environment.gnome.excludePackages = with pkgs; [
-    decibels
-    epiphany
-    geary
-    gnome-characters
-    gnome-connections
-    gnome-console
-    gnome-disk-utility
-    gnome-software
-    gnome-system-monitor
-    gnome-tour
-    gnome-user-docs
-    gnome-weather
-    yelp
+    # Hyprland
+    hyprshot
+    inputs.quickshell.packages.${system.triple}.default
+
+    # QML development (for quickshell)
+    kdePackages.qtdeclarative
   ];
 
   # Home manager
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.extraSpecialArgs = { inherit inputs monitors system; };
+  home-manager.extraSpecialArgs = { inherit inputs system; };
   home-manager.users.carlos = import ./home/${system.triple}.nix;
+
+  # Auto login user
+  services.getty.autologinUser = "carlos";
 
   # Fonts
   fonts.packages = with pkgs; [
     nerd-fonts.monaspace
-  ];
-
-  # Configure monitor in GDM (https://discourse.nixos.org/t/var-lib-gdm-config-equivalent/49118/11)
-  systemd.tmpfiles.rules = [
-    "L+ /run/gdm/.config/monitors.xml - - - - ${monitors.source}"
   ];
 }

@@ -56,6 +56,14 @@
     # Android
     android.url = "github:tadfisher/android-nixpkgs/stable";
     android.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Vicinae
+    vicinae.url = "github:vicinaehq/vicinae";
+    vicinae.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Quickshell
+    quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+    quickshell.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
