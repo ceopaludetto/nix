@@ -1,12 +1,9 @@
-{ config, ... }:
-let
-  theme.url = "https://raw.githubusercontent.com/refact0r/midnight-discord/refs/heads/master/themes/midnight.theme.css";
-  theme.overrides = config.lib.stylix.colors {
-    template = ../../assets/overrides/nixcord.css.mustache;
-    extension = ".css";
-  };
-in
+{ inputs, osConfig, ... }:
 {
+  imports = [
+    inputs.nixcord.homeModules.nixcord
+  ];
+
   # Nixcord configuration (manually themed with midnight catppuccin mocha)
   programs.nixcord.enable = true;
 
@@ -20,10 +17,7 @@ in
   programs.nixcord.config.plugins.relationshipNotifier.enable = true;
 
   # Theme
-  programs.nixcord.config.themeLinks = [ theme.url ];
-
-  programs.nixcord.config.useQuickCss = true;
-  programs.nixcord.quickCss = builtins.readFile theme.overrides;
-
-  stylix.targets.nixcord.enable = false;
+  programs.nixcord.config.enabledThemes = [ "discord.css" ];
+  xdg.configFile."vesktop/themes/discord.css".source =
+    "${osConfig.programs.matugen.theme.files}/.config/vesktop/themes/discord.css";
 }

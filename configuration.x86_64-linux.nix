@@ -1,4 +1,5 @@
 {
+  default,
   inputs,
   lib,
   pkgs,
@@ -16,8 +17,8 @@
     # Home Manager
     inputs.home-manager.nixosModules.home-manager
 
-    # Stylix
-    ./utilities/stylix/${system.triple}.nix
+    # Theme
+    ./utilities/theme/${system.triple}.nix
   ];
 
   # State version
@@ -47,7 +48,7 @@
   nixpkgs.config.android_sdk.accept_license = true;
 
   # Add overlay for nix-vscode-extensions
-  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+  # nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
 
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
@@ -272,10 +273,15 @@
     pkg-config
     openssl
 
+    # Programs (GTK)
+    gnome-font-viewer
+    loupe
+    nautilus
+    papers
+
     # Programs
     jetbrains.idea-ultimate
     genymotion
-    nautilus
     slack
 
     # Nix related
@@ -288,6 +294,7 @@
     # Hyprland
     hyprshot
     inputs.quickshell.packages.${system.triple}.default
+    matugen
 
     # QML development (for quickshell)
     kdePackages.qtdeclarative
@@ -297,14 +304,19 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.extraSpecialArgs = { inherit inputs system; };
+  home-manager.extraSpecialArgs = { inherit default inputs system; };
   home-manager.users.carlos = import ./home/${system.triple}.nix;
 
   # Auto login user
   services.getty.autologinUser = "carlos";
 
-  # Fonts
-  fonts.packages = with pkgs; [
-    nerd-fonts.monaspace
-  ];
+  # Trash support
+  services.gvfs.enable = true;
+
+  # Open in Ghostty
+  programs.nautilus-open-any-terminal.enable = true;
+  programs.nautilus-open-any-terminal.terminal = "ghostty";
+
+  # Enable sushi (preview in nautilus)
+  services.gnome.sushi.enable = true;
 }

@@ -1,11 +1,15 @@
-{ lib, osConfig, ... }:
+{
+  default,
+  lib,
+  osConfig,
+  ...
+}:
 {
   programs.zed-editor.enable = true;
 
   programs.zed-editor.extensions = [
     # Style
     "bearded-icon-theme"
-    "gruvbox-material"
     # NixOS
     "nix"
     # GraphQL
@@ -33,11 +37,14 @@
     base_keymap = "VSCode";
 
     # Style
-    theme = lib.mkForce "Gruvbox Material";
+    theme = lib.mkForce "Matugen Dark";
     icon_theme = lib.mkForce "Bearded Icon Theme";
 
-    buffer_font_size = lib.mkForce 14;
-    ui_font_family = lib.mkForce osConfig.stylix.fonts.monospace.name;
+    buffer_font_size = default.fonts.size * 3.5 / 3;
+    buffer_font_family = default.fonts.mono.name;
+
+    ui_font_family = default.fonts.sans.name;
+    ui_font_size = default.fonts.size * 4.5 / 3;
 
     minimap.show = "always";
     wrap_guides = [
@@ -68,4 +75,8 @@
     # Typst
     lsp.tinymist.settings.exportPdf = "onSave";
   };
+
+  # Add theme to configuration directory
+  xdg.configFile."zed/themes/matugen.json".source =
+    "${osConfig.programs.matugen.theme.files}/.config/zed/themes/matugen.json";
 }

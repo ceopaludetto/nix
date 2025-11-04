@@ -4,6 +4,7 @@
 			"language_servers": ["nil", "!nixd"]
 		}
 	},
+	"lsp_document_colors": "background",
 	"lsp": {
 		"nil": {
 			"settings": {

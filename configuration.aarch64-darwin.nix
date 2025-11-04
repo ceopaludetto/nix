@@ -1,5 +1,6 @@
 {
   config,
+  default,
   inputs,
   pkgs,
   system,
@@ -14,8 +15,8 @@
     inputs.nix-homebrew.darwinModules.nix-homebrew
     inputs.brew-nix.darwinModules.default
 
-    # Stylix
-    ./utilities/stylix/${system.triple}.nix
+    # Theme
+    ./utilities/theme/${system.triple}.nix
   ];
 
   # State version
@@ -90,7 +91,7 @@
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
 
-  home-manager.extraSpecialArgs = { inherit inputs system; };
+  home-manager.extraSpecialArgs = { inherit default inputs system; };
   home-manager.users.carlos = import ./home/${system.triple}.nix;
 
   # Fonts
@@ -190,11 +191,5 @@
     	echo "[+] Installing Rosetta"
     	/usr/sbin/softwareupdate --install-rosetta --agree-to-license
     fi
-  '';
-
-  # Post activation script
-  system.activationScripts."postActivation".text = ''
-    echo "[+] Switching Wallpaper"
-    /usr/bin/osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"${./assets/wallpaper.heic}\""
   '';
 }

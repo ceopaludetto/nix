@@ -26,10 +26,6 @@
     nixcord.url = "github:kaylorben/nixcord";
     nixcord.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Spicetify (spotify)
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-    spicetify-nix.inputs.nixpkgs.follows = "nixpkgs";
-
     # Homebrew installation
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core.url = "github:homebrew/homebrew-core";
@@ -45,14 +41,6 @@
     brew-api.url = "github:BatteredBunny/brew-api";
     brew-api.flake = false;
 
-    # Stylix
-    stylix.url = "github:nix-community/stylix";
-    stylix.inputs.nixpkgs.follows = "nixpkgs";
-
-    # VSCode
-    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
-    nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
-
     # Android
     android.url = "github:tadfisher/android-nixpkgs/stable";
     android.inputs.nixpkgs.follows = "nixpkgs";
@@ -64,6 +52,10 @@
     # Quickshell
     quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
     quickshell.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Matugen
+    matugen.url = "github:/InioX/Matugen";
+    matugen.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -79,10 +71,12 @@
           system.triple = "x86_64-linux";
           system.isDarwin = false;
           system.isLinux = true;
+
+          default = import ./utilities/default.nix { pkgs = nixpkgs.legacyPackages.${system.triple}; };
         in
         nixpkgs.lib.nixosSystem {
           system = system.triple;
-          specialArgs = { inherit inputs system; };
+          specialArgs = { inherit default inputs system; };
           modules = [
             ./configuration.${system.triple}.nix
           ];
@@ -94,10 +88,12 @@
           system.triple = "aarch64-darwin";
           system.isDarwin = true;
           system.isLinux = false;
+
+          default = import ./utilities/default.nix { pkgs = nixpkgs.legacyPackages.${system.triple}; };
         in
         nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";
-          specialArgs = { inherit inputs system; };
+          specialArgs = { inherit default inputs system; };
           modules = [
             ./configuration.${system.triple}.nix
           ];

@@ -14,6 +14,6 @@
     window.opacity = 0.9;
 
     theme.name = "gruvbox-dark";
-    theme.iconTheme = "Papirus-Dark";
+    theme.iconTheme = "Tela-circle-purple-dark";
   };
 }

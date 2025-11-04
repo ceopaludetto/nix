@@ -1,5 +1,9 @@
-{ ... }:
+{ inputs, ... }:
 {
+  imports = [
+    inputs.zen-browser.homeModules.beta
+  ];
+
   # Zen browser configuration (stylix supported)
   programs.zen-browser.enable = true;
 
@@ -101,5 +105,5 @@
     };
 
   # Set zen browser profile name to Stylix
-  stylix.targets.zen-browser.profileNames = [ "default" ];
+  # stylix.targets.zen-browser.profileNames = [ "default" ];
 }

@@ -1,4 +1,5 @@
 {
+  default,
   lib,
   pkgs,
   osConfig,
@@ -7,7 +8,9 @@
 {
   imports = [
     ./common.nix
+
     ../programs/vicinae/x86_64-linux.nix
+    ../programs/quickshell/x86_64-linux.nix
   ];
 
   # Home directory
@@ -30,16 +33,48 @@
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
 
-    general.gaps_in = 3;
-    general.gaps_out = "0,6,6,6";
+    general.gaps_in = default.window.gap;
+    general.gaps_out = lib.strings.concatStringsSep "," default.window.marginListInString;
     general.border_size = 0;
 
-    decoration.rounding = 8;
+    decoration.rounding = default.window.radius;
     decoration.inactive_opacity = 0.9;
 
     input.kb_layout = "us";
     input.kb_variant = "intl"; # Support dead keys
     input.follow_mouse = 2;
+
+    animations = {
+      enabled = true;
+
+      # Curves
+      bezier = [
+        "expressiveFastSpatial, 0.42, 1.67, 0.21, 0.90"
+        "expressiveSlowSpatial, 0.39, 1.29, 0.35, 0.98"
+        "expressiveDefaultSpatial, 0.38, 1.21, 0.22, 1.00"
+        "emphasizedDecel, 0.05, 0.7, 0.1, 1"
+        "emphasizedAccel, 0.3, 0, 0.8, 0.15"
+        "standardDecel, 0, 0, 0, 1"
+        "menuDecel, 0.1, 1, 0, 1"
+        "menuAccel, 0.52, 0.03, 0.72, 0.08"
+      ];
+
+      # Animations
+      animation = [
+        "windowsIn, 1, 3, emphasizedDecel, popin 80%"
+        "windowsOut, 1, 2, emphasizedDecel, popin 90%"
+        "windowsMove, 1, 3, emphasizedDecel, slide"
+        "border, 1, 10, emphasizedDecel"
+
+        "layersIn, 1, 2.7, emphasizedDecel, popin 93%"
+        "layersOut, 1, 2.4, menuAccel, popin 94%"
+
+        "fadeLayersIn, 1, 0.5, menuDecel"
+        "fadeLayersOut, 1, 2.7, menuAccel"
+
+        "workspaces, 1, 7, menuDecel, slide"
+      ];
+    };
 
     windowrule = [
       "workspace 2, class:^(zen-beta)$" # Open Zen in workspace 2
@@ -133,7 +168,8 @@
     ];
 
     exec-once = [
-      "qs" # Start quickshell
+      # Start quickshell
+      "qs"
 
       # Default open applications
       "[workspace 2 silent] zen-beta"
@@ -147,14 +183,44 @@
     fi
   '';
 
+  # Enable hyprpaper for hyprland
+  services.hyprpaper.enable = true;
+  services.hyprpaper.settings.preload = [ "${default.wallpaper.inPNG}" ];
+  services.hyprpaper.settings.wallpaper = [ ",${default.wallpaper.inPNG}" ];
+
   # Notifications
   services.mako.enable = true;
 
+  # XDG
+  xdg.userDirs.enable = true;
+
   # GTK
   gtk.enable = true;
+  gtk.colorScheme = "dark";
 
-  gtk.iconTheme.name = osConfig.stylix.icons.dark;
-  gtk.iconTheme.package = osConfig.stylix.icons.package;
+  gtk.theme.package = pkgs.adw-gtk3;
+  gtk.theme.name = "adw-gtk3";
+
+  gtk.font.name = default.fonts.sans.name;
+  gtk.font.size = default.fonts.size;
+
+  xdg.configFile."gtk-4.0/gtk.css".source =
+    "${osConfig.programs.matugen.theme.files}/.config/gtk-4.0/gtk.css";
+
+  xdg.configFile."gtk-3.0/gtk.css".source =
+    "${osConfig.programs.matugen.theme.files}/.config/gtk-3.0/gtk.css";
+
+  gtk.iconTheme.package = pkgs.tela-circle-icon-theme.override { colorVariants = [ "purple" ]; };
+  gtk.iconTheme.name = "Tela-circle-purple-dark";
+
+  # Cursor
+  home.pointerCursor.enable = true;
+  home.pointerCursor.gtk.enable = true;
+  home.pointerCursor.hyprcursor.enable = true;
+
+  home.pointerCursor.name = "Bibata-Modern-Classic";
+  home.pointerCursor.package = pkgs.bibata-cursors;
+  home.pointerCursor.size = 24;
 
   # Dconf settings
   dconf.settings."org/gnome/desktop/wm/preferences".button-layout = ":";

@@ -1,24 +1,9 @@
-{
-  inputs,
-  pkgs,
-  system,
-  ...
-}:
+{ pkgs, system, ... }:
 {
   imports = [
-    # Zen Browser
-    inputs.zen-browser.homeModules.beta
-
-    # Nixcord (discord)
-    inputs.nixcord.homeModules.nixcord
-
-    # Spicetify (spotify)
-    inputs.spicetify-nix.homeManagerModules.spicetify
-
     # Applications
     ../programs/ghostty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
-    ../programs/vscode/${system.triple}.nix
     ../programs/zed/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
 

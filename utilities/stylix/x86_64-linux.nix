@@ -10,7 +10,7 @@
   stylix.cursor.size = 24;
 
   stylix.icons.enable = true;
-  stylix.icons.package = pkgs.papirus-icon-theme.override { color = "blue"; };
+  stylix.icons.package = pkgs.papirus-icon-theme.override { color = "palebrown"; };
   stylix.icons.dark = "Papirus-Dark";
   stylix.icons.light = "Papirus-Light";
 }
