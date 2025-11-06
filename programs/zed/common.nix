@@ -1,9 +1,4 @@
-{
-  default,
-  lib,
-  osConfig,
-  ...
-}:
+{ default, lib, ... }:
 {
   programs.zed-editor.enable = true;
 
@@ -75,8 +70,4 @@
     # Typst
     lsp.tinymist.settings.exportPdf = "onSave";
   };
-
-  # Add theme to configuration directory
-  xdg.configFile."zed/themes/matugen.json".source =
-    "${osConfig.programs.matugen.theme.files}/.config/zed/themes/matugen.json";
 }

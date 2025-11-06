@@ -1,4 +1,4 @@
-{ inputs, osConfig, ... }:
+{ inputs, ... }:
 {
   imports = [
     inputs.nixcord.homeModules.nixcord
@@ -18,6 +18,4 @@
 
   # Theme
   programs.nixcord.config.enabledThemes = [ "discord.css" ];
-  xdg.configFile."vesktop/themes/discord.css".source =
-    "${osConfig.programs.matugen.theme.files}/.config/vesktop/themes/discord.css";
 }

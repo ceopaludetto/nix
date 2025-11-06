@@ -39,9 +39,6 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Add overlay for nix-vscode-extensions
-  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
-
   # Enable networking
   networking.hostName = "Carlos-MacBook-Pro";
   networking.knownNetworkServices = [

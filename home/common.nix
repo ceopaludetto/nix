@@ -4,11 +4,13 @@
     # Applications
     ../programs/ghostty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
+    ../programs/spicetify/${system.triple}.nix
     ../programs/zed/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
 
     # Utilities
     ../utilities/android/${system.triple}.nix
+    ../utilities/theme/${system.triple}.nix
   ];
 
   # State version
@@ -117,6 +119,10 @@
     "--time-style=+%Y/%m/%d %H:%M"
   ];
 
-  # Spotify player
-  programs.spotify-player.enable = true;
+  # Vim
+  programs.vim.enable = true;
+  programs.vim.packageConfigurable = pkgs.vim;
+
+  # JQ
+  programs.jq.enable = true;
 }

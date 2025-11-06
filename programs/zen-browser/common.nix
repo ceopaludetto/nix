@@ -1,4 +1,12 @@
-{ inputs, ... }:
+{ config, inputs, ... }:
+let
+  mkExtensionSettings = builtins.mapAttrs (
+    _: pluginId: {
+      install_url = "https://addons.mozilla.org/firefox/downloads/latest/${pluginId}/latest.xpi";
+      installation_mode = "force_installed";
+    }
+  );
+in
 {
   imports = [
     inputs.zen-browser.homeModules.beta
@@ -18,8 +26,12 @@
   programs.zen-browser.profiles.default.isDefault = true;
 
   # Theme
-  # programs.zen-browser.profiles.default.userChrome = builtins.readFile theme.userChrome;
-  # programs.zen-browser.profiles.default.userContent = builtins.readFile theme.userContent;
+  programs.zen-browser.profiles.default.userChrome = ''
+    @import url("${config.home.homeDirectory}/.config/zen-browser/themes/user-chrome.css");
+  '';
+  programs.zen-browser.profiles.default.userContent = ''
+    @import url("${config.home.homeDirectory}/.config/zen-browser/themes/user-content.css");
+  '';
 
   # Search
   programs.zen-browser.profiles.default.search.default = "google";
@@ -62,48 +74,36 @@
   programs.zen-browser.profiles.default.spacesForce = true;
 
   # Policies
-  programs.zen-browser.policies =
-    let
-      mkExtensionSettings = builtins.mapAttrs (
-        _: pluginId: {
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/${pluginId}/latest.xpi";
-          installation_mode = "force_installed";
-        }
-      );
-    in
-    {
-      AutofillAddressEnabled = false;
-      AutofillCreditCardEnabled = false;
-      DisableAppUpdate = true;
-      DisableFeedbackCommands = true;
-      DisableFirefoxStudies = true;
-      DisablePocket = true;
-      DisableTelemetry = true;
-      DontCheckDefaultBrowser = true;
-      NoDefaultBookmarks = true;
-      OfferToSaveLogins = false;
-      TranslateEnabled = false;
-      EnableTrackingProtection = {
-        Value = true;
-        Locked = true;
-        Cryptomining = true;
-        Fingerprinting = true;
-      };
-      ExtensionSettings = mkExtensionSettings {
-        # AdBlocker
-        "uBlock0@raymondhill.net" = "ublock-origin";
-        # YouTube
-        "sponsorBlocker@ajay.app" = "sponsorblock";
-        "control-panel-for-youtube@jbscript.dev" = "control-panel-for-youtube";
-        # Twitter
-        "{5cce4ab5-3d47-41b9-af5e-8203eea05245}" = "control-panel-for-twitter";
-        # Bitwarden
-        "{446900e4-71c2-419f-a6a7-df9c091e268b}" = "bitwarden-password-manager";
-        # Twitch
-        "twitch5@coolcmd" = "twitch_5";
-      };
+  programs.zen-browser.policies = {
+    AutofillAddressEnabled = false;
+    AutofillCreditCardEnabled = false;
+    DisableAppUpdate = true;
+    DisableFeedbackCommands = true;
+    DisableFirefoxStudies = true;
+    DisablePocket = true;
+    DisableTelemetry = true;
+    DontCheckDefaultBrowser = true;
+    NoDefaultBookmarks = true;
+    OfferToSaveLogins = false;
+    TranslateEnabled = false;
+    EnableTrackingProtection = {
+      Value = true;
+      Locked = true;
+      Cryptomining = true;
+      Fingerprinting = true;
     };
+    ExtensionSettings = mkExtensionSettings {
+      "uBlock0@raymondhill.net" = "ublock-origin"; # uBlock
+      "sponsorBlocker@ajay.app" = "sponsorblock"; # Sponsor block
+      "{446900e4-71c2-419f-a6a7-df9c091e268b}" = "bitwarden-password-manager"; # Bitwarden
 
-  # Set zen browser profile name to Stylix
-  # stylix.targets.zen-browser.profileNames = [ "default" ];
+      "control-panel-for-youtube@jbscript.dev" = "control-panel-for-youtube"; # Control panel for YT
+      "{5cce4ab5-3d47-41b9-af5e-8203eea05245}" = "control-panel-for-twitter"; # Control panel for Twitter
+      "twitch5@coolcmd" = "twitch_5"; # Twitch custom player
+
+      "{6def1df3-6313-4648-a6ca-945b92aba510}" = "no-google-search-translation"; # Disable google search translation
+
+      "foxyproxy@eric.h.jung" = "foxyproxy-standard"; # Proxy
+    };
+  };
 }

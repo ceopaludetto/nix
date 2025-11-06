@@ -1,4 +1,5 @@
 {
+  config,
   default,
   inputs,
   lib,
@@ -6,10 +7,30 @@
   system,
   ...
 }:
+let
+  toHypr = name: settings: lib.strings.concatLines (builtins.map (el: "${name}=${el}") settings);
+  edids = [
+    (pkgs.runCommand "DEL41D9" { } ''
+      mkdir -p $out/lib/firmware/edid
+      cp ${./assets/firmware/DEL41D9-DP-2-2560-1440-165.bin} $out/lib/firmware/edid/DEL41D9.bin
+    '')
+    (pkgs.runCommand "DEL41DA" { } ''
+      mkdir -p $out/lib/firmware/edid
+      cp ${./assets/firmware/DEL41DA-HDMI-A-1-2560-1440-144.bin} $out/lib/firmware/edid/DEL41DA.bin
+    '')
+  ];
+in
 {
   imports = [
     # Hardware
     ./hardware-configuration.nix
+
+    # NixOS Hardware
+    inputs.nixos-hardware.nixosModules.common-cpu-amd
+    inputs.nixos-hardware.nixosModules.common-gpu-amd
+    inputs.nixos-hardware.nixosModules.common-pc
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
+    inputs.nixos-hardware.nixosModules.common-hidpi
 
     # Secure Boot
     inputs.lanzaboote.nixosModules.lanzaboote
@@ -17,8 +38,8 @@
     # Home Manager
     inputs.home-manager.nixosModules.home-manager
 
-    # Theme
-    ./utilities/theme/${system.triple}.nix
+    # DMS greeter
+    inputs.dms.nixosModules.greeter
   ];
 
   # State version
@@ -47,9 +68,6 @@
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.android_sdk.accept_license = true;
 
-  # Add overlay for nix-vscode-extensions
-  # nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
-
   # Allow insecure packages
   nixpkgs.config.permittedInsecurePackages = [
     "qtwebengine-5.15.19"
@@ -66,39 +84,102 @@
   boot.lanzaboote.settings.console-mode = "max";
   boot.lanzaboote.settings.default = "Atlas*";
 
-  # Plymouth
-  boot.plymouth.enable = true;
+  # Support NTFS
+  boot.supportedFilesystems = [ "ntfs" ];
 
-  # Silent boot
-  boot.consoleLogLevel = 0;
-  boot.initrd.verbose = false;
-  boot.kernelParams = [
-    # Prevent logging to show plymouth correctly
-    "quiet"
-    "splash"
-    "boot.shell_on_fail"
-    "loglevel=3"
-    "rd.systemd.show_status=false"
-    "rd.udev.log_level=3"
-    "udev.log_priority=3"
-  ];
+  # Enable AMD GPU
+  hardware.graphics.enable = true;
+  hardware.graphics.enable32Bit = true;
+
+  # Force display mode (by using CRU modified EDID)
+  hardware.display.edid.enable = true;
+  hardware.display.edid.packages = edids;
+
+  # Set both video= and EDID for the horizontal monitor
+  hardware.display.outputs."DP-2".mode = "e";
+  hardware.display.outputs."DP-2".edid = "DEL41D9.bin";
+
+  # Set both video= and EDID for the vertical monitor
+  hardware.display.outputs."HDMI-A-1".mode = "e";
+  hardware.display.outputs."HDMI-A-1".edid = "DEL41DA.bin";
 
   # Enable networking
   networking.hostName = "Carlos-PC";
-
-  # Enabling VM bridge
   networking.useDHCP = false;
-  networking.bridges = {
-    "br0".interfaces = [ "enp74s0" ];
-  };
 
-  # Creating bridge
-  networking.interfaces.br0.name = "br0";
-  networking.interfaces.br0.useDHCP = true;
+  # Wifi interface
+  networking.interfaces.wlp73s0.name = "wlp73s0";
+  networking.interfaces.wlp73s0.useDHCP = true;
 
   # Wired interface
   networking.interfaces.enp74s0.name = "enp74s0";
   networking.interfaces.enp74s0.useDHCP = true;
+
+  # Enable networkmanager
+  networking.networkmanager.enable = true;
+  networking.networkmanager.settings.device.keep-configuration = "no";
+  networking.networkmanager.ensureProfiles.profiles = {
+    WiFi = {
+      connection.autoconnect = "false";
+      connection.id = "WiFi";
+      connection.timestamp = "1762314067";
+      connection.type = "wifi";
+      connection.uuid = "8ba21304-aa09-4752-86f5-c21ff6b55d54";
+
+      ipv4.method = "auto";
+      ipv6.addr-gen-mode = "default";
+      ipv6.method = "auto";
+
+      wifi.mode = "infrastructure";
+      wifi.ssid = "Metallica";
+
+      wifi-security.key-mgmt = "wpa-psk";
+      wifi-security.psk = "ruacorreiabarbosa@#17";
+    };
+    Wired = {
+      connection.autoconnect-priority = "-999";
+      connection.id = "Wired";
+      connection.interface-name = "enp74s0";
+      connection.timestamp = "1762303218";
+      connection.type = "ethernet";
+      connection.uuid = "602146ae-6631-3235-abd6-21d435723583";
+
+      ipv4.method = "auto";
+      ipv6.addr-gen-mode = "default";
+      ipv6.method = "auto";
+    };
+    Docker = {
+      bridge.stp = "false";
+
+      connection.autoconnect = "false";
+      connection.id = "Docker";
+      connection.interface-name = "docker0";
+      connection.timestamp = "1762303222";
+      connection.type = "bridge";
+      connection.uuid = "ae6ce40c-1b0b-446b-bbe8-54a0bca7cf9c";
+
+      ipv4.address1 = "172.17.0.1/16";
+      ipv4.method = "manual";
+
+      ipv6.addr-gen-mode = "default";
+      ipv6.method = "ignore";
+    };
+    Loopback = {
+      connection.autoconnect = "false";
+      connection.id = "Loopback";
+      connection.interface-name = "lo";
+      connection.timestamp = "1762303218";
+      connection.type = "loopback";
+      connection.uuid = "7d53e1be-5e5f-424c-8032-86cab7ee19a6";
+
+      ipv4.address1 = "127.0.0.1/8";
+      ipv4.method = "manual";
+
+      ipv6.addr-gen-mode = "default";
+      ipv6.address1 = "::1/128";
+      ipv6.method = "manual";
+    };
+  };
 
   # Set time zone.
   time.timeZone = "America/Sao_Paulo";
@@ -121,28 +202,6 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable AMD GPU
-  hardware.graphics.enable = true;
-  hardware.graphics.enable32Bit = true;
-
-  # Force display mode (by using EDID fetched from linuxhw and video= kernel parameters)
-  hardware.display.edid.linuxhw."DEL41D9_2022" = [
-    "DEL41D9"
-    "2022"
-  ];
-  hardware.display.edid.linuxhw."DEL41DA_2022" = [
-    "DEL41DA"
-    "2022"
-  ];
-
-  # Set both video= and EDID for the horizontal monitor
-  hardware.display.outputs."DP-2".mode = "2560x1440@165";
-  hardware.display.outputs."DP-2".edid = "DEL41D9_2022.bin";
-
-  # Set both video= and EDID for the vertical monitor
-  hardware.display.outputs."HDMI-A-1".mode = "2560x1440@144";
-  hardware.display.outputs."HDMI-A-1".edid = "DEL41DA_2022.bin";
-
   # Enable bluetooth
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
@@ -160,6 +219,7 @@
 
   # Enable UWSM
   programs.uwsm.enable = true;
+  programs.uwsm.package = pkgs.uwsm.override { uuctlSupport = false; };
   programs.uwsm.waylandCompositors = {
     hyprland.prettyName = "Hyprland";
     hyprland.comment = "Hyprland compositor managed by UWSM";
@@ -168,7 +228,11 @@
 
   # Configure XDG Portal
   xdg.portal.enable = true;
-  xdg.portal.extraPortals = with pkgs; [ xdg-desktop-portal-hyprland ];
+  xdg.portal.wlr.enable = true;
+  xdg.portal.extraPortals = with pkgs; [
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-hyprland
+  ];
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
@@ -195,19 +259,16 @@
     extraGroups = [
       "adbusers"
       "docker"
+      "greeter"
       "kvm"
       "libvirtd"
+      "networkmanager"
       "wheel"
     ];
   };
 
-  # SSH
-  programs.ssh.startAgent = true;
+  # SSH server
   services.openssh.enable = true;
-
-  # Virtualisation
-  virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
 
   # Docker
   virtualisation.containers.enable = true;
@@ -242,17 +303,13 @@
   # Enable localsend
   programs.localsend.enable = true;
 
-  # Enable virtualisation manager
-  programs.virt-manager.enable = true;
-
   # Environment variables
   environment.variables = {
-    QT_QPA_PLATFORM = "wayland;xcb"; # Force Wayland, fallback to X11
-  };
-  environment.sessionVariables = {
+    ELECTRON_OZONE_PLATFORM_HINT = "auto";
     NIXOS_OZONE_WL = "1"; # Force Wayland
     NIXOS_WAYLAND = "1"; # Force Wayland
     PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
+    QT_QPA_PLATFORM = "wayland"; # Force Wayland, fallback to X11
   };
 
   # List packages installed in system profile. To search, run:
@@ -260,10 +317,9 @@
     # Commands / tools
     gcc
     gnumake
-    jq
+    hw-probe
     lsof
     sbctl
-    vim
 
     # Qemu
     qemu
@@ -275,6 +331,7 @@
 
     # Programs (GTK)
     gnome-font-viewer
+    gnome-calculator
     loupe
     nautilus
     papers
@@ -292,12 +349,11 @@
     python313
 
     # Hyprland
+    config.home-manager.users.carlos.home.pointerCursor.package
+    glib
     hyprshot
-    inputs.quickshell.packages.${system.triple}.default
+    kdePackages.qtmultimedia
     matugen
-
-    # QML development (for quickshell)
-    kdePackages.qtdeclarative
   ];
 
   # Home manager
@@ -306,9 +362,6 @@
 
   home-manager.extraSpecialArgs = { inherit default inputs system; };
   home-manager.users.carlos = import ./home/${system.triple}.nix;
-
-  # Auto login user
-  services.getty.autologinUser = "carlos";
 
   # Trash support
   services.gvfs.enable = true;
@@ -319,4 +372,32 @@
 
   # Enable sushi (preview in nautilus)
   services.gnome.sushi.enable = true;
+
+  # Fonts
+  fonts.fontconfig.enable = true;
+  fonts.fontconfig.defaultFonts.serif = [ default.fonts.sans.name ];
+  fonts.fontconfig.defaultFonts.sansSerif = [ default.fonts.sans.name ];
+  fonts.fontconfig.defaultFonts.monospace = [ default.fonts.mono.name ];
+  fonts.fontconfig.defaultFonts.emoji = [ default.fonts.emoji.name ];
+  fonts.packages = default.fonts.packages;
+
+  # Dank material shell greeter
+  programs.dankMaterialShell.greeter.enable = true;
+  programs.dankMaterialShell.greeter.configHome = config.home-manager.users.carlos.home.homeDirectory;
+  programs.dankMaterialShell.greeter.compositor.name = "hyprland";
+  programs.dankMaterialShell.greeter.compositor.customConfig = ''
+    env = DMS_RUN_GREETER,1
+
+    exec-once=hyprctl setcursor ${config.home-manager.users.carlos.home.pointerCursor.name} ${builtins.toString config.home-manager.users.carlos.home.pointerCursor.size}
+    misc {
+     	disable_hyprland_logo = true
+      disable_splash_rendering = true
+    }
+
+    ${toHypr "monitor" config.home-manager.users.carlos.wayland.windowManager.hyprland.settings.monitor}
+  '';
+
+  # Gnome keyring
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
 }

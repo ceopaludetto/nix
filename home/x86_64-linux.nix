@@ -1,29 +1,20 @@
 {
+  config,
   default,
   lib,
   pkgs,
-  osConfig,
   ...
 }:
 {
   imports = [
     ./common.nix
 
-    ../programs/vicinae/x86_64-linux.nix
-    ../programs/quickshell/x86_64-linux.nix
+    # Material Shell
+    ../programs/material-shell/x86_64-linux.nix
   ];
 
   # Home directory
   home.homeDirectory = lib.mkForce /home/carlos;
-
-  # Home packages
-  home.packages = with pkgs; [
-    # Programs
-    yaak
-
-    # CLIs
-    valgrind
-  ];
 
   # Hyprland
   wayland.windowManager.hyprland.enable = true;
@@ -43,6 +34,9 @@
     input.kb_layout = "us";
     input.kb_variant = "intl"; # Support dead keys
     input.follow_mouse = 2;
+
+    misc.disable_hyprland_logo = true;
+    misc.disable_splash_rendering = true;
 
     animations = {
       enabled = true;
@@ -77,17 +71,18 @@
     };
 
     windowrule = [
-      "workspace 2, class:^(zen-beta)$" # Open Zen in workspace 2
+      "workspace 1, class:^(zen-beta)$" # Open Zen in workspace 1
       "workspace 6, class:^(Slack)$" # Open Slack in workspace 6
 
-      "fullscreenstate:0 0, class:^(yaak-app)$" # Force yaak to open windowed
+      "noborder, class:^(org\\.gnome\\.)"
+      "noborder, class:^(com\\.mitchellh\\.ghostty)$"
+
+      "float, class:^(org\\.gnome\\.Calculator)$"
+      "float, class:^(yaak-app)$"
     ];
 
     layerrule = [
-      # Vicinae
-      "blur,vicinae"
-      "ignorealpha 0, vicinae"
-      "noanim, vicinae"
+      "noanim, ^(quickshell)$"
     ];
 
     workspace = [
@@ -107,7 +102,10 @@
     bind = [
       # Applications
       "$mod, T, exec, ghostty"
-      "$mod, Space, exec, vicinae toggle"
+
+      # Dank material shell
+      "$mod, space, exec, dms ipc call spotlight toggle"
+      "$mod, TAB, exec, dms ipc call hypr toggleOverview"
 
       # Close active window
       "$mod, Q, killactive"
@@ -154,6 +152,25 @@
       "$mod SHIFT, PRINT, exec, hyprshot -m region"
     ];
 
+    # <el> repeat/locked
+    bindel = [
+      # +- audio
+      ", XF86AudioRaiseVolume, exec, dms ipc call audio increment 3"
+      ", XF86AudioLowerVolume, exec, dms ipc call audio decrement 3"
+    ];
+
+    # <l> locked
+    bindl = [
+      # Mute toggle
+      ", XF86AudioMute, exec, dms ipc call audio mute"
+
+      # Previous/Next/PlayPause
+      ", XF86AudioNext, exec, dms ipc call mpris next"
+      ", XF86AudioPrev, exec, dms ipc call mpris previous"
+      ", XF86AudioPlay, exec, dms ipc call mpris playPause"
+    ];
+
+    # <e> repeat
     binde = [
       # Resize
       "ALT, h, resizeactive, -32 0" # 2560 / 80 = 32 (80 sections)
@@ -162,34 +179,30 @@
       "ALT, j, resizeactive, 0 18"
     ];
 
+    # <c> click
+    bindc = [
+      "ALT, mouse:272, togglefloating"
+    ];
+
+    # <m> mouse
+    bindm = [
+      "ALT, mouse:272, movewindow"
+    ];
+
     monitor = [
-      "HDMI-A-1, 2560x1440@1444, 2560x-820, 1, transform, 1"
+      "HDMI-A-1, 2560x1440@144, 2560x-820, 1, transform, 1"
       "DP-2, 2560x1440@165, 0x0, 1"
     ];
 
     exec-once = [
-      # Start quickshell
-      "qs"
+      # Start dank material shell
+      "bash -c \"wl-paste --watch cliphist store &\""
 
       # Default open applications
       "[workspace 2 silent] zen-beta"
       "[workspace 6 silent] slack"
     ];
   };
-
-  programs.zsh.profileExtra = ''
-    if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-    	exec uwsm start -S hyprland-uwsm.desktop
-    fi
-  '';
-
-  # Enable hyprpaper for hyprland
-  services.hyprpaper.enable = true;
-  services.hyprpaper.settings.preload = [ "${default.wallpaper.inPNG}" ];
-  services.hyprpaper.settings.wallpaper = [ ",${default.wallpaper.inPNG}" ];
-
-  # Notifications
-  services.mako.enable = true;
 
   # XDG
   xdg.userDirs.enable = true;
@@ -204,11 +217,11 @@
   gtk.font.name = default.fonts.sans.name;
   gtk.font.size = default.fonts.size;
 
+  # Link dank shell to GTK
   xdg.configFile."gtk-4.0/gtk.css".source =
-    "${osConfig.programs.matugen.theme.files}/.config/gtk-4.0/gtk.css";
-
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/gtk-4.0/dank-colors.css";
   xdg.configFile."gtk-3.0/gtk.css".source =
-    "${osConfig.programs.matugen.theme.files}/.config/gtk-3.0/gtk.css";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/gtk-3.0/dank-colors.css";
 
   gtk.iconTheme.package = pkgs.tela-circle-icon-theme.override { colorVariants = [ "purple" ]; };
   gtk.iconTheme.name = "Tela-circle-purple-dark";
@@ -224,4 +237,8 @@
 
   # Dconf settings
   dconf.settings."org/gnome/desktop/wm/preferences".button-layout = ":";
+
+  # QT
+  qt.enable = true;
+  qt.platformTheme.name = "gtk3";
 }

@@ -24,8 +24,8 @@ rec {
 
   window.gap = 4;
   window.margin = window.gap * 2;
-  window.radius = 16;
+  window.radius = 12;
 
-  window.marginList = builtins.genList (i: if i == 0 then -window.margin else window.margin) 4;
+  window.marginList = builtins.genList (_: window.margin) 4;
   window.marginListInString = builtins.map builtins.toString window.marginList;
 }

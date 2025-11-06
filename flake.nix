@@ -9,6 +9,10 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Nix hardware
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware.inputs.nixpkgs.follows = "nixpkgs";
+
     # Home manager
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -18,9 +22,13 @@
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
     # Zen browser
-    zen-browser.url = "github:benjaminkitt/zen-browser-flake";
+    zen-browser.url = "github:0xc000022070/zen-browser-flake";
     zen-browser.inputs.nixpkgs.follows = "nixpkgs";
     zen-browser.inputs.home-manager.follows = "home-manager";
+
+    # Spicetify (spotify)
+    spicetify.url = "github:Gerg-L/spicetify-nix";
+    spicetify.inputs.nixpkgs.follows = "nixpkgs";
 
     # Nixcord (discord)
     nixcord.url = "github:kaylorben/nixcord";
@@ -45,17 +53,21 @@
     android.url = "github:tadfisher/android-nixpkgs/stable";
     android.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Vicinae
-    vicinae.url = "github:vicinaehq/vicinae";
-    vicinae.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Quickshell
-    quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
-    quickshell.inputs.nixpkgs.follows = "nixpkgs";
-
     # Matugen
     matugen.url = "github:/InioX/Matugen";
     matugen.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Dank Material Shell
+    dgop.url = "github:AvengeMedia/dgop";
+    dgop.inputs.nixpkgs.follows = "nixpkgs";
+
+    dms-cli.url = "github:AvengeMedia/danklinux";
+    dms-cli.inputs.nixpkgs.follows = "nixpkgs";
+
+    dms.url = "github:AvengeMedia/DankMaterialShell";
+    dms.inputs.nixpkgs.follows = "nixpkgs";
+    dms.inputs.dgop.follows = "dgop";
+    dms.inputs.dms-cli.follows = "dms-cli";
   };
 
   outputs =
