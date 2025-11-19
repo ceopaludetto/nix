@@ -74,6 +74,9 @@ in
     "python-2.7.18.12"
   ];
 
+  # Add overlay for nix-vscode-extensions
+  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+
   # Bootloader
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -148,22 +151,6 @@ in
       ipv6.addr-gen-mode = "default";
       ipv6.method = "auto";
     };
-    Docker = {
-      bridge.stp = "false";
-
-      connection.autoconnect = "false";
-      connection.id = "Docker";
-      connection.interface-name = "docker0";
-      connection.timestamp = "1762303222";
-      connection.type = "bridge";
-      connection.uuid = "ae6ce40c-1b0b-446b-bbe8-54a0bca7cf9c";
-
-      ipv4.address1 = "172.17.0.1/16";
-      ipv4.method = "manual";
-
-      ipv6.addr-gen-mode = "default";
-      ipv6.method = "ignore";
-    };
     Loopback = {
       connection.autoconnect = "false";
       connection.id = "Loopback";
@@ -234,6 +221,14 @@ in
     xdg-desktop-portal-hyprland
   ];
 
+  # Hyprland XDG configuration
+  xdg.portal.config.hyprland.default = [
+    "hyprland"
+    "gtk"
+  ];
+  xdg.portal.config.hyprland."org.freedesktop.impl.portal.FileChooser" = [ "nautilus" ];
+  xdg.portal.config.hyprland."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
   services.xserver.xkb.variant = "intl";
@@ -258,11 +253,11 @@ in
     description = "Carlos Paludetto";
     extraGroups = [
       "adbusers"
-      "docker"
       "greeter"
       "kvm"
       "libvirtd"
       "networkmanager"
+      "podman"
       "wheel"
     ];
   };
@@ -270,9 +265,13 @@ in
   # SSH server
   services.openssh.enable = true;
 
-  # Docker
+  # Podman
   virtualisation.containers.enable = true;
-  virtualisation.docker.enable = true;
+  virtualisation.podman.enable = true;
+  virtualisation.podman.extraPackages = with pkgs; [ virtiofsd ];
+  virtualisation.podman.dockerCompat = true;
+  virtualisation.podman.dockerSocket.enable = true; # Mimic docker socket.
+  virtualisation.podman.defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
 
   # ADB (Android Device Bridge)
   programs.adb.enable = true;
@@ -318,25 +317,28 @@ in
     gcc
     gnumake
     hw-probe
+    liquidctl
     lsof
     sbctl
-
-    # Qemu
-    qemu
-    qemu_kvm
+    podman-compose
 
     # Required for Rust
     pkg-config
     openssl
 
     # Programs (GTK)
-    gnome-font-viewer
+    celluloid
+    file-roller
     gnome-calculator
+    gnome-font-viewer
+    gnome-logs
     loupe
+    mission-center
     nautilus
     papers
 
     # Programs
+    bruno
     jetbrains.idea-ultimate
     genymotion
     slack
@@ -354,6 +356,16 @@ in
     hyprshot
     kdePackages.qtmultimedia
     matugen
+
+    # Nautilus portal
+    (pkgs.runCommandLocal "nautilus-portal" { } ''
+      mkdir -p $out/share/xdg-desktop-portal/portals
+      cat > $out/share/xdg-desktop-portal/portals/nautilus.portal <<EOF
+      [portal]
+      DBusName=org.gnome.Nautilus
+      Interfaces=org.freedesktop.impl.portal.FileChooser
+      EOF
+    '')
   ];
 
   # Home manager
@@ -385,19 +397,32 @@ in
   programs.dankMaterialShell.greeter.enable = true;
   programs.dankMaterialShell.greeter.configHome = config.home-manager.users.carlos.home.homeDirectory;
   programs.dankMaterialShell.greeter.compositor.name = "hyprland";
-  programs.dankMaterialShell.greeter.compositor.customConfig = ''
-    env = DMS_RUN_GREETER,1
+  programs.dankMaterialShell.greeter.compositor.customConfig =
+    with config.home-manager.users.carlos.home; ''
+      env = DMS_RUN_GREETER,1
+      env = XCURSOR_THEME,${pointerCursor.name}
+      env = XCURSOR_SIZE,${builtins.toString pointerCursor.size}
 
-    exec-once=hyprctl setcursor ${config.home-manager.users.carlos.home.pointerCursor.name} ${builtins.toString config.home-manager.users.carlos.home.pointerCursor.size}
-    misc {
-     	disable_hyprland_logo = true
-      disable_splash_rendering = true
-    }
+      misc {
+      	disable_hyprland_logo = true
+        disable_splash_rendering = true
+      }
 
-    ${toHypr "monitor" config.home-manager.users.carlos.wayland.windowManager.hyprland.settings.monitor}
-  '';
+      ${toHypr "monitor" config.home-manager.users.carlos.wayland.windowManager.hyprland.settings.monitor}
+    '';
 
   # Gnome keyring
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
+
+  # Dconf
+  programs.dconf.enable = true;
+
+  # OBS
+  programs.obs-studio.enable = true;
+  programs.obs-studio.plugins = with pkgs.obs-studio-plugins; [
+    wlrobs # Wayland capture
+    obs-pipewire-audio-capture # Pipewire audio capture
+    obs-vaapi # AMD hardware acceleration
+  ];
 }

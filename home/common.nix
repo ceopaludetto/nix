@@ -5,6 +5,8 @@
     ../programs/ghostty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
     ../programs/spicetify/${system.triple}.nix
+    ../programs/vscode/${system.triple}.nix
+    ../programs/yaak/${system.triple}.nix
     ../programs/zed/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
 
@@ -27,8 +29,13 @@
     wget
 
     # Nix related
-    nil
+    nixd
     nixfmt
+  ];
+
+  # Home session path
+  home.sessionPath = [
+    "$HOME/.cache/.bun/bin" # Bun
   ];
 
   # Home manager manages itself

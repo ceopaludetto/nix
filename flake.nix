@@ -49,6 +49,10 @@
     brew-api.url = "github:BatteredBunny/brew-api";
     brew-api.flake = false;
 
+    # VSCode
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
+
     # Android
     android.url = "github:tadfisher/android-nixpkgs/stable";
     android.inputs.nixpkgs.follows = "nixpkgs";
@@ -61,13 +65,9 @@
     dgop.url = "github:AvengeMedia/dgop";
     dgop.inputs.nixpkgs.follows = "nixpkgs";
 
-    dms-cli.url = "github:AvengeMedia/danklinux";
-    dms-cli.inputs.nixpkgs.follows = "nixpkgs";
-
     dms.url = "github:AvengeMedia/DankMaterialShell";
     dms.inputs.nixpkgs.follows = "nixpkgs";
     dms.inputs.dgop.follows = "dgop";
-    dms.inputs.dms-cli.follows = "dms-cli";
   };
 
   outputs =
@@ -84,7 +84,10 @@
           system.isDarwin = false;
           system.isLinux = true;
 
-          default = import ./utilities/default.nix { pkgs = nixpkgs.legacyPackages.${system.triple}; };
+          default = import ./utilities/default.nix {
+            inherit system;
+            pkgs = nixpkgs.legacyPackages.${system.triple};
+          };
         in
         nixpkgs.lib.nixosSystem {
           system = system.triple;
@@ -101,7 +104,10 @@
           system.isDarwin = true;
           system.isLinux = false;
 
-          default = import ./utilities/default.nix { pkgs = nixpkgs.legacyPackages.${system.triple}; };
+          default = import ./utilities/default.nix {
+            inherit system;
+            pkgs = nixpkgs.legacyPackages.${system.triple};
+          };
         in
         nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin";

@@ -6,6 +6,13 @@ let
       installation_mode = "force_installed";
     }
   );
+
+  mkLockedAttrs = builtins.mapAttrs (
+    _: value: {
+      Value = value;
+      Status = "locked";
+    }
+  );
 in
 {
   imports = [
@@ -104,6 +111,9 @@ in
       "{6def1df3-6313-4648-a6ca-945b92aba510}" = "no-google-search-translation"; # Disable google search translation
 
       "foxyproxy@eric.h.jung" = "foxyproxy-standard"; # Proxy
+    };
+    Preferences = mkLockedAttrs {
+      "widget.use-xdg-desktop-portal.file-picker" = 1;
     };
   };
 }

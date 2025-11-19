@@ -70,4 +70,21 @@
     # Typst
     lsp.tinymist.settings.exportPdf = "onSave";
   };
+
+  programs.zed-editor.userKeymaps = [
+    {
+      context = "Editor && !menu";
+      bindings = {
+        "ctrl-c" = "editor::Copy";
+        "ctrl-x" = "editor::Cut";
+        "ctrl-v" = "editor::Paste";
+        "ctrl-y" = "editor::Undo";
+        "ctrl-f" = "buffer_search::Deploy";
+        "ctrl-o" = "workspace::Open";
+        "ctrl-s" = "workspace::Save";
+        "ctrl-a" = "editor::SelectAll";
+        "ctrl-b" = "workspace::ToggleLeftDock";
+      };
+    }
+  ];
 }

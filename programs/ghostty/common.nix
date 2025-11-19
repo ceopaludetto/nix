@@ -13,5 +13,5 @@
   programs.ghostty.settings.font-family = default.fonts.mono.name;
 
   # Theme
-  programs.ghostty.settings.config-file = "./config-dankcolors";
+  programs.ghostty.settings.config-file = builtins.toString "./config-dankcolors";
 }

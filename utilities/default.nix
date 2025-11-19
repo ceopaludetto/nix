@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, system, ... }:
 rec {
   fonts.sans.name = "Roboto Condensed";
   fonts.sans.package = pkgs.roboto;
@@ -28,4 +28,6 @@ rec {
 
   window.marginList = builtins.genList (_: window.margin) 4;
   window.marginListInString = builtins.map builtins.toString window.marginList;
+
+  homeDirectory = if system.isDarwin then /Users/carlos else /home/carlos;
 }

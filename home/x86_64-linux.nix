@@ -30,6 +30,7 @@
 
     decoration.rounding = default.window.radius;
     decoration.inactive_opacity = 0.9;
+    decoration.shadow.enabled = false;
 
     input.kb_layout = "us";
     input.kb_variant = "intl"; # Support dead keys
@@ -71,11 +72,8 @@
     };
 
     windowrule = [
-      "workspace 1, class:^(zen-beta)$" # Open Zen in workspace 1
+      "workspace 2, class:^(zen-beta)$" # Open Zen in workspace 1
       "workspace 6, class:^(Slack)$" # Open Slack in workspace 6
-
-      "noborder, class:^(org\\.gnome\\.)"
-      "noborder, class:^(com\\.mitchellh\\.ghostty)$"
 
       "float, class:^(org\\.gnome\\.Calculator)$"
       "float, class:^(yaak-app)$"
@@ -83,6 +81,7 @@
 
     layerrule = [
       "noanim, ^(quickshell)$"
+      "noanim, ^(dms)$"
     ];
 
     workspace = [
@@ -101,11 +100,12 @@
 
     bind = [
       # Applications
-      "$mod, T, exec, ghostty"
+      "$mod, T, exec, uwsm app -- ghostty +new-window"
 
       # Dank material shell
       "$mod, space, exec, dms ipc call spotlight toggle"
       "$mod, TAB, exec, dms ipc call hypr toggleOverview"
+      "$mod, slash, exec, dms ipc call keybinds toggle hyprland"
 
       # Close active window
       "$mod, Q, killactive"
@@ -195,12 +195,14 @@
     ];
 
     exec-once = [
-      # Start dank material shell
-      "bash -c \"wl-paste --watch cliphist store &\""
-
       # Default open applications
-      "[workspace 2 silent] zen-beta"
-      "[workspace 6 silent] slack"
+      "[workspace 2 silent] uwsm app -- zen-beta"
+      "[workspace 6 silent] uwsm app -- slack"
+    ];
+
+    env = [
+      # Screenshot dir
+      "HYPRSHOT_DIR,${config.home.homeDirectory}/Pictures/Screenshots"
     ];
   };
 
@@ -212,7 +214,7 @@
   gtk.colorScheme = "dark";
 
   gtk.theme.package = pkgs.adw-gtk3;
-  gtk.theme.name = "adw-gtk3";
+  gtk.theme.name = "adw-gtk3-dark";
 
   gtk.font.name = default.fonts.sans.name;
   gtk.font.size = default.fonts.size;
