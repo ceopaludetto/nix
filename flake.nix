@@ -18,8 +18,12 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Lanzaboote (secure boot support)
-    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.2";
+    lanzaboote.url = "github:nix-community/lanzaboote";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Niri
+    niri.url = "github:sodiboo/niri-flake";
+    niri.inputs.nixpkgs.follows = "nixpkgs";
 
     # Zen browser
     zen-browser.url = "github:0xc000022070/zen-browser-flake";

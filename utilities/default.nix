@@ -22,12 +22,8 @@ rec {
     inherit pkgs;
   };
 
-  window.gap = 4;
-  window.margin = window.gap * 2;
-  window.radius = 12;
-
-  window.marginList = builtins.genList (_: window.margin) 4;
-  window.marginListInString = builtins.map builtins.toString window.marginList;
+  window.gap = 8;
+  window.radius = 12.0;
 
   homeDirectory = if system.isDarwin then /Users/carlos else /home/carlos;
 }

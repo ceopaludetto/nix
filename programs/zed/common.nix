@@ -55,6 +55,11 @@
     max_tabs = 10;
     tabs.file_icons = true;
 
+    # Title bar
+    title_bar.show_onboarding_banner = false;
+    title_bar.show_sign_in = false;
+    title_bar.show_user_picture = false;
+
     # Project panel
     project_panel.hide_root = true;
     project_panel.auto_fold_dirs = true;

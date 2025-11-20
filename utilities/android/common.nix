@@ -1,8 +1,9 @@
 {
   config,
   inputs,
-  system,
   lib,
+  pkgs,
+  system,
   ...
 }:
 let
@@ -48,6 +49,9 @@ in
 {
   home.packages = [
     android.sdk
+  ]
+  ++ lib.optionals (system.triple == "x86_64-linux") [
+    pkgs.android-studio
   ];
 
   home.file.${android.path}.source = "${android.sdk}/share/android-sdk";

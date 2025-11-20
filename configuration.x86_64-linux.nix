@@ -8,7 +8,6 @@
   ...
 }:
 let
-  toHypr = name: settings: lib.strings.concatLines (builtins.map (el: "${name}=${el}") settings);
   edids = [
     (pkgs.runCommand "DEL41D9" { } ''
       mkdir -p $out/lib/firmware/edid
@@ -37,6 +36,9 @@ in
 
     # Home Manager
     inputs.home-manager.nixosModules.home-manager
+
+    # Niri
+    inputs.niri.nixosModules.niri
 
     # DMS greeter
     inputs.dms.nixosModules.greeter
@@ -75,7 +77,10 @@ in
   ];
 
   # Add overlay for nix-vscode-extensions
-  nixpkgs.overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+  nixpkgs.overlays = [
+    inputs.nix-vscode-extensions.overlays.default
+    inputs.niri.overlays.niri
+  ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = lib.mkForce false;
@@ -199,35 +204,18 @@ in
   # Disable X11 server
   services.xserver.enable = lib.mkForce false;
 
-  # Enable hyprland
-  programs.hyprland.enable = true;
-  programs.hyprland.xwayland.enable = true;
-  programs.hyprland.withUWSM = true;
+  # Enable Niri
+  programs.niri.enable = true;
 
   # Enable UWSM
   programs.uwsm.enable = true;
   programs.uwsm.package = pkgs.uwsm.override { uuctlSupport = false; };
   programs.uwsm.waylandCompositors = {
-    hyprland.prettyName = "Hyprland";
-    hyprland.comment = "Hyprland compositor managed by UWSM";
-    hyprland.binPath = "/run/current-system/sw/bin/Hyprland";
+    niri.prettyName = "Niri";
+    niri.comment = "Niri compositor managed by UWSM";
+    niri.binPath = "/run/current-system/sw/bin/niri";
+    niri.extraArgs = [ "--session" ];
   };
-
-  # Configure XDG Portal
-  xdg.portal.enable = true;
-  xdg.portal.wlr.enable = true;
-  xdg.portal.extraPortals = with pkgs; [
-    xdg-desktop-portal-gtk
-    xdg-desktop-portal-hyprland
-  ];
-
-  # Hyprland XDG configuration
-  xdg.portal.config.hyprland.default = [
-    "hyprland"
-    "gtk"
-  ];
-  xdg.portal.config.hyprland."org.freedesktop.impl.portal.FileChooser" = [ "nautilus" ];
-  xdg.portal.config.hyprland."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
 
   # Configure keymap in X11
   services.xserver.xkb.layout = "us";
@@ -304,11 +292,7 @@ in
 
   # Environment variables
   environment.variables = {
-    ELECTRON_OZONE_PLATFORM_HINT = "auto";
-    NIXOS_OZONE_WL = "1"; # Force Wayland
-    NIXOS_WAYLAND = "1"; # Force Wayland
     PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
-    QT_QPA_PLATFORM = "wayland"; # Force Wayland, fallback to X11
   };
 
   # List packages installed in system profile. To search, run:
@@ -316,7 +300,6 @@ in
     # Commands / tools
     gcc
     gnumake
-    hw-probe
     liquidctl
     lsof
     sbctl
@@ -327,20 +310,18 @@ in
     openssl
 
     # Programs (GTK)
+    baobab
     celluloid
     file-roller
     gnome-calculator
     gnome-font-viewer
-    gnome-logs
     loupe
     mission-center
     nautilus
     papers
 
     # Programs
-    bruno
     jetbrains.idea-ultimate
-    genymotion
     slack
 
     # Nix related
@@ -350,22 +331,9 @@ in
     python2
     python313
 
-    # Hyprland
+    # Niri
     config.home-manager.users.carlos.home.pointerCursor.package
-    glib
-    hyprshot
-    kdePackages.qtmultimedia
-    matugen
-
-    # Nautilus portal
-    (pkgs.runCommandLocal "nautilus-portal" { } ''
-      mkdir -p $out/share/xdg-desktop-portal/portals
-      cat > $out/share/xdg-desktop-portal/portals/nautilus.portal <<EOF
-      [portal]
-      DBusName=org.gnome.Nautilus
-      Interfaces=org.freedesktop.impl.portal.FileChooser
-      EOF
-    '')
+    xwayland-satellite-stable
   ];
 
   # Home manager
@@ -378,9 +346,9 @@ in
   # Trash support
   services.gvfs.enable = true;
 
-  # Open in Ghostty
+  # Open in Alacritty
   programs.nautilus-open-any-terminal.enable = true;
-  programs.nautilus-open-any-terminal.terminal = "ghostty";
+  programs.nautilus-open-any-terminal.terminal = "alacritty";
 
   # Enable sushi (preview in nautilus)
   services.gnome.sushi.enable = true;
@@ -396,19 +364,15 @@ in
   # Dank material shell greeter
   programs.dankMaterialShell.greeter.enable = true;
   programs.dankMaterialShell.greeter.configHome = config.home-manager.users.carlos.home.homeDirectory;
-  programs.dankMaterialShell.greeter.compositor.name = "hyprland";
+  programs.dankMaterialShell.greeter.compositor.name = "niri";
   programs.dankMaterialShell.greeter.compositor.customConfig =
     with config.home-manager.users.carlos.home; ''
-      env = DMS_RUN_GREETER,1
-      env = XCURSOR_THEME,${pointerCursor.name}
-      env = XCURSOR_SIZE,${builtins.toString pointerCursor.size}
-
-      misc {
-      	disable_hyprland_logo = true
-        disable_splash_rendering = true
-      }
-
-      ${toHypr "monitor" config.home-manager.users.carlos.wayland.windowManager.hyprland.settings.monitor}
+      cursor { xcursor-theme "${pointerCursor.name}"; xcursor-size ${builtins.toString pointerCursor.size}; }
+      environment { "DMS_RUN_GREETER" "1"; }
+      gestures { hot-corners { off; }; }
+      hotkey-overlay { skip-at-startup; }
+      output "DP-2" { transform "normal"; position x=0 y=0; mode "2560x1440@165.0"; focus-at-startup; }
+      output "HDMI-A-1" { transform "90"; position x=2560 y=-820; mode "2560x1440@144.0"; }
     '';
 
   # Gnome keyring

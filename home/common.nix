@@ -2,7 +2,7 @@
 {
   imports = [
     # Applications
-    ../programs/ghostty/${system.triple}.nix
+    ../programs/alacritty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
     ../programs/spicetify/${system.triple}.nix
     ../programs/vscode/${system.triple}.nix
@@ -25,7 +25,6 @@
     awscli2
     bombardier
     fastfetch
-    flyctl
     wget
 
     # Nix related

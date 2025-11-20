@@ -2,10 +2,11 @@
 {
   imports = [
     inputs.dms.homeModules.dankMaterialShell.default
+    inputs.dms.homeModules.dankMaterialShell.niri
   ];
 
   programs.dankMaterialShell.enable = true;
-  programs.dankMaterialShell.systemd.enable = true;
+  programs.dankMaterialShell.niri.enableSpawn = true;
 
   programs.dankMaterialShell.plugins.Calculator.enable = true;
   programs.dankMaterialShell.plugins.Calculator.src = pkgs.fetchFromGitHub {
