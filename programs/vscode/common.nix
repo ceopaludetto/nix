@@ -1,5 +1,6 @@
 {
   config,
+  default,
   lib,
   pkgs,
   system,
@@ -7,7 +8,7 @@
 }:
 rec {
   # VScode configuration
-  programs.vscode.enable = false;
+  programs.vscode.enable = true;
   programs.vscode.package = pkgs.vscodium;
 
   programs.vscode.profiles.default.enableUpdateCheck = false;
@@ -28,6 +29,7 @@ rec {
     # Vim
     vscodevim.vim
 
+    # Theme
     (pkgs.callPackage ./utilities/theme.nix {
       homeDirectory = builtins.toString config.home.homeDirectory;
     })
@@ -78,7 +80,7 @@ rec {
       "window.commandCenter" = true;
       "window.dialogStyle" = "native";
       "window.newWindowDimensions" = "maximized";
-      "window.zoomLevel" = 1.15;
+      "window.zoomLevel" = 1;
 
       # Error lens
       "errorLens.followCursor" = "activeLine";
@@ -131,11 +133,11 @@ rec {
       "telemetry.telemetryLevel" = "off";
 
       # # Font configuration
-      "markdown.preview.fontSize" = lib.mkForce 13;
-      "chat.editor.fontSize" = lib.mkForce 13;
-      "debug.console.fontSize" = lib.mkForce 13;
-      "editor.fontSize" = lib.mkForce 13;
-      "terminal.integrated.fontSize" = lib.mkForce 13;
+      "markdown.preview.fontSize" = default.fonts.size;
+      "chat.editor.fontSize" = default.fonts.size;
+      "debug.console.fontSize" = default.fonts.size;
+      "editor.fontSize" = default.fonts.size;
+      "terminal.integrated.fontSize" = default.fonts.size;
     }
     (lib.optionals (system.triple == "x86_64-linux") {
       "window.menuBarVisibility" = "hidden";

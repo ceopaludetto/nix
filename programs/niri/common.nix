@@ -47,7 +47,7 @@ in
     layout.gaps = default.window.gap;
     layout.focus-ring.enable = false;
     layout.background-color = "transparent";
-    layout.default-column-width.proportion = 1.0 / 2.0; # 50%
+    layout.default-column-width.proportion = 1.0; # 100%
 
     # Overview
     overview.zoom = 0.6;
@@ -161,10 +161,9 @@ in
       # Make some applications to open as 75% of the screen
       {
         matches = [
-          { app-id = "^zen-beta$"; }
-          { app-id = "^dev.zed.Zed"; }
+          { app-id = "^Alacritty$"; }
         ];
-        default-column-width.proportion = 3.0 / 4.0;
+        default-column-width.proportion = 0.5;
       }
       # Make some applications to open floating
       {
@@ -182,7 +181,6 @@ in
           }
         ];
         open-on-output = "HDMI-A-1";
-        default-column-width.proportion = 1.0;
       }
     ];
 

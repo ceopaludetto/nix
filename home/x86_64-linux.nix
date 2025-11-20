@@ -36,8 +36,8 @@
   xdg.configFile."gtk-3.0/gtk.css".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/gtk-3.0/dank-colors.css";
 
-  gtk.iconTheme.package = pkgs.tela-circle-icon-theme.override { colorVariants = [ "purple" ]; };
-  gtk.iconTheme.name = "Tela-circle-purple-dark";
+  gtk.iconTheme.package = pkgs.tela-circle-icon-theme.override { colorVariants = [ "black" ]; };
+  gtk.iconTheme.name = "Tela-circle-black-dark";
 
   # Cursor
   home.pointerCursor.enable = true;
