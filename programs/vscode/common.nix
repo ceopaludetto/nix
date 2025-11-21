@@ -23,7 +23,9 @@ rec {
     # Common
     editorconfig.editorconfig
     graphql.vscode-graphql-syntax
+    jnoortheen.nix-ide
     mikestead.dotenv
+    mkhl.direnv
     naumovs.color-highlight
 
     # Vim
@@ -132,12 +134,20 @@ rec {
       # Telemetry
       "telemetry.telemetryLevel" = "off";
 
-      # # Font configuration
+      # Font configuration
       "markdown.preview.fontSize" = default.fonts.size;
       "chat.editor.fontSize" = default.fonts.size;
       "debug.console.fontSize" = default.fonts.size;
       "editor.fontSize" = default.fonts.size;
       "terminal.integrated.fontSize" = default.fonts.size;
+
+      # Nix configuration
+      "nix.enableLanguageServer" = true;
+      "nix.serverPath" = "nixd";
+      "nix.formatterPath" = "nixfmt";
+
+      "[nix]"."editor.defaultFormatter" = "jnoortheen.nix-ide";
+      "[nix]"."editor.formatOnSave" = true;
     }
     (lib.optionals (system.triple == "x86_64-linux") {
       "window.menuBarVisibility" = "hidden";
@@ -186,26 +196,6 @@ rec {
       "typescript.updateImportsOnFileMove.enabled" = "never";
       "typescript.preferences.importModuleSpecifier" = "shortest";
       "typescript.preferences.importModuleSpecifierEnding" = "minimal";
-    }
-  ];
-
-  # Nix
-  programs.vscode.profiles."Nix".extensions =
-    with pkgs.vscode-marketplace;
-    [
-      jnoortheen.nix-ide
-    ]
-    ++ programs.vscode.profiles.default.extensions;
-
-  programs.vscode.profiles."Nix".userSettings = lib.mkMerge [
-    programs.vscode.profiles.default.userSettings
-    {
-      "nix.enableLanguageServer" = true;
-      "nix.serverPath" = "nixd";
-      "nix.formatterPath" = "nixfmt";
-
-      "[nix]"."editor.defaultFormatter" = "jnoortheen.nix-ide";
-      "[nix]"."editor.formatOnSave" = true;
     }
   ];
 

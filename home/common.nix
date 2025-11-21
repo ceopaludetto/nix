@@ -91,13 +91,19 @@
 
     aws.disabled = true;
 
-    bun.symbol = "";
+    bun.symbol = " ";
+    dart.symbol = " ";
+    git_branch.symbol = " ";
+    nix_shell.symbol = " ";
+    nodejs.symbol = " ";
+    package.symbol = "󰏗 ";
+    rust.symbol = " ";
 
     custom.git_email.style = "208";
     custom.git_email.command = "echo $(git config user.email)";
     custom.git_email.detect_folders = [ ".git" ];
-    custom.git_email.symbol = "";
-    custom.git_email.format = "with [$symbol $output]($style)";
+    custom.git_email.symbol = " ";
+    custom.git_email.format = "with [$symbol$output]($style) ";
     custom.git_email.ignore_timeout = true;
   };
 
@@ -130,4 +136,10 @@
 
   # JQ
   programs.jq.enable = true;
+
+  # Direnv
+  programs.direnv.enable = true;
+  programs.direnv.enableZshIntegration = true;
+  programs.direnv.nix-direnv.enable = true;
+  programs.direnv.mise.enable = true;
 }

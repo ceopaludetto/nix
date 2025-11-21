@@ -22,10 +22,6 @@ in
     input_path = "${templates}/vscode/theme.json"
     output_path = "${homeDirectory}/.config/vscode-oss/themes/matugen.json"
 
-    [templates.zed]
-    input_path = "${templates}/zed/index.json"
-    output_path = "${homeDirectory}/.config/zed/themes/matugen.json"
-
     [templates.zen-browser-user-chrome]
     input_path = "${templates}/zen-browser/user-chrome.css"
     output_path = "${homeDirectory}/.config/zen-browser/themes/user-chrome.css"

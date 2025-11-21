@@ -305,10 +305,6 @@ in
     sbctl
     podman-compose
 
-    # Required for Rust
-    pkg-config
-    openssl
-
     # Programs (GTK)
     baobab
     celluloid
