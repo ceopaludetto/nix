@@ -21,6 +21,12 @@
     lanzaboote.url = "github:nix-community/lanzaboote";
     lanzaboote.inputs.nixpkgs.follows = "nixpkgs";
 
+    # SOPS (secrets manager)
+    sops.url = "github:Mic92/sops-nix";
+    sops.inputs.nixpkgs.follows = "nixpkgs";
+    opsops.url = "github:vst/opsops";
+    opsops.inputs.nixpkgs.follows = "nixpkgs";
+
     # Niri
     niri.url = "github:sodiboo/niri-flake";
     niri.inputs.nixpkgs.follows = "nixpkgs";

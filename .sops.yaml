@@ -1,0 +1,9 @@
+keys:
+  - &nix age1qm063k99wunvsfnjtn6jepgs77lkmnej0wth7mpatetuef00s58sjnxks4
+  # TODO: add darwin pub key
+
+creation_rules:
+  - path_regex: /dev/stdin
+    key_groups:
+    - age:
+      - *nix

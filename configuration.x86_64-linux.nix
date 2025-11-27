@@ -31,17 +31,23 @@ in
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     inputs.nixos-hardware.nixosModules.common-hidpi
 
+    # Home Manager
+    inputs.home-manager.nixosModules.home-manager
+
     # Secure Boot
     inputs.lanzaboote.nixosModules.lanzaboote
 
-    # Home Manager
-    inputs.home-manager.nixosModules.home-manager
+    # SOPS
+    inputs.sops.nixosModules.sops
 
     # Niri
     inputs.niri.nixosModules.niri
 
     # DMS greeter
     inputs.dms.nixosModules.greeter
+
+    # Load age secrets
+    ./utilities/secrets.nix
   ];
 
   # State version
@@ -126,6 +132,11 @@ in
   # Enable networkmanager
   networking.networkmanager.enable = true;
   networking.networkmanager.settings.device.keep-configuration = "no";
+
+  networking.networkmanager.ensureProfiles.environmentFiles = with config.sops; [
+    secrets."wifi/password".path
+  ];
+
   networking.networkmanager.ensureProfiles.profiles = {
     WiFi = {
       connection.autoconnect = "false";
@@ -142,7 +153,7 @@ in
       wifi.ssid = "Metallica";
 
       wifi-security.key-mgmt = "wpa-psk";
-      wifi-security.psk = "ruacorreiabarbosa@#17";
+      wifi-security.psk = "$METALLICA_PASSWORD";
     };
     Wired = {
       connection.autoconnect-priority = "-999";
@@ -280,11 +291,11 @@ in
     libxt
     xorg.libX11
     xorg.libxcb
-    xorg.libXtst
-    xorg.libXi
     xorg.libXft
-    xorg.libXTrap
+    xorg.libXi
     xorg.libXt
+    xorg.libXTrap
+    xorg.libXtst
   ];
 
   # Enable localsend
@@ -298,6 +309,7 @@ in
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
     # Commands / tools
+    bitwarden-cli
     gcc
     gnumake
     liquidctl
@@ -330,6 +342,10 @@ in
     # Niri
     config.home-manager.users.carlos.home.pointerCursor.package
     xwayland-satellite-stable
+
+    # Sops
+    sops
+    inputs.opsops.packages.${system.triple}.default
   ];
 
   # Home manager

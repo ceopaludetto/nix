@@ -1,0 +1,27 @@
+secrets:
+  wifi:
+    password:
+      type: "script"
+      value:
+        content: "printf \"METALLICA_PASSWORD=%s\" \"$(bw get password \"WiFi\")\""
+
+  ceo.paludetto@gmail.com:
+    password:
+      type: "process"
+      value:
+        command: "bw"
+        arguments: ["get", "password", "Google (Pessoal)"]
+
+  carlos.paludetto@outlook.com:
+    password:
+      type: "process"
+      value:
+        command: "bw"
+        arguments: ["get", "password", "Microsoft (Pessoal)"]
+
+  carlos.paludetto@intelipost.com.br:
+    password:
+      type: "process"
+      value:
+        command: "bw"
+        arguments: ["get", "password", "Google (Intelipost)"]

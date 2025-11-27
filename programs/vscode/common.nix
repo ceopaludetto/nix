@@ -9,7 +9,7 @@
 rec {
   # VScode configuration
   programs.vscode.enable = true;
-  programs.vscode.package = pkgs.vscodium;
+  programs.vscode.package = pkgs.vscode;
 
   programs.vscode.profiles.default.enableUpdateCheck = false;
   programs.vscode.profiles.default.enableExtensionUpdateCheck = false;
@@ -27,6 +27,10 @@ rec {
     mikestead.dotenv
     mkhl.direnv
     naumovs.color-highlight
+
+    # Remote development
+    ms-vscode-remote.remote-containers
+    ms-vscode-remote.remote-ssh
 
     # Vim
     vscodevim.vim
@@ -53,6 +57,11 @@ rec {
         "<C-x>" = false;
         "<C-z>" = false;
       };
+
+      # Devcontainer
+      "dev.containers.dockerSocketPath" = "unix:///run/user/1000/podman/podman.sock";
+      "dev.containers.dockerPath" = "podman";
+      "dev.containers.dockerComposePath" = "podman-compose";
 
       # Security
       "security.workspace.trust.untrustedFiles" = "open";
@@ -134,6 +143,8 @@ rec {
       # Telemetry
       "telemetry.telemetryLevel" = "off";
 
+      "chat.disableAIFeatures" = true;
+
       # Font configuration
       "markdown.preview.fontSize" = default.fonts.size;
       "chat.editor.fontSize" = default.fonts.size;
@@ -175,6 +186,23 @@ rec {
       # TOML
       "[toml]"."editor.defaultFormatter" = "tamasfe.even-better-toml";
       "[toml]"."editor.formatOnSave" = true;
+    }
+  ];
+
+  # Swift
+  programs.vscode.profiles."Swift".extensions =
+    with pkgs.vscode-marketplace;
+    [
+      llvm-vs-code-extensions.lldb-dap
+      swiftlang.swift-vscode
+    ]
+    ++ programs.vscode.profiles.default.extensions;
+
+  programs.vscode.profiles."Swift".userSettings = lib.mkMerge [
+    programs.vscode.profiles.default.userSettings
+    {
+      "[swift]"."editor.defaultFormatter" = "swiftlang.swift-vscode";
+      "[swift]"."editor.formatOnSave" = true;
     }
   ];
 

@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
 
     # Symlink
     mkdir -p $out/share/vscode/extensions/${vscodeExtUniqueId}/themes
-    ln -s ${homeDirectory}/.config/vscode-oss/themes/matugen.json $out/share/vscode/extensions/${vscodeExtUniqueId}/themes/dankshell-default.json
+    ln -s ${homeDirectory}/.config/vscode/themes/matugen.json $out/share/vscode/extensions/${vscodeExtUniqueId}/themes/dankshell-default.json
   '';
 }

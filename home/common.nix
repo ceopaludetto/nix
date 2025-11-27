@@ -10,6 +10,7 @@
     ../programs/zen-browser/${system.triple}.nix
 
     # Utilities
+    ../utilities/accounts/${system.triple}.nix
     ../utilities/android/${system.triple}.nix
     ../utilities/theme/${system.triple}.nix
   ];
