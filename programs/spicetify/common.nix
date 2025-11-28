@@ -16,4 +16,8 @@ in
   programs.spicetify.enabledExtensions = with spicePkgs.extensions; [
     hidePodcasts
   ];
+
+  # Force wayland
+  programs.spicetify.windowManagerPatch = true;
+  programs.spicetify.wayland = true;
 }

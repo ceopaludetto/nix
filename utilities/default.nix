@@ -1,4 +1,4 @@
-{ pkgs, system, ... }:
+{ pkgs, ... }:
 rec {
   fonts.sans.name = "Roboto Condensed";
   fonts.sans.package = pkgs.roboto;
@@ -24,6 +24,4 @@ rec {
 
   window.gap = 8;
   window.radius = 12.0;
-
-  homeDirectory = if system.isDarwin then /Users/carlos else /home/carlos;
 }

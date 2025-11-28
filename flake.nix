@@ -1,13 +1,13 @@
 {
-  description = "ceopaludetto flake";
+  description = "NixOS configuration";
 
   inputs = {
     # Nix packages
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # Nix darwin
-    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    # Nix asahi
+    nixos-asahi.url = "github:nix-community/nixos-apple-silicon";
+    nixos-asahi.inputs.nixpkgs.follows = "nixpkgs";
 
     # Nix hardware
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -44,21 +44,6 @@
     nixcord.url = "github:kaylorben/nixcord";
     nixcord.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Homebrew installation
-    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    homebrew-core.url = "github:homebrew/homebrew-core";
-    homebrew-core.flake = false;
-    homebrew-cask.url = "github:homebrew/homebrew-cask";
-    homebrew-cask.flake = false;
-
-    # Homebrew casks as nix packages
-    brew-nix.url = "github:BatteredBunny/brew-nix";
-    brew-nix.inputs.nix-darwin.follows = "nix-darwin";
-    brew-nix.inputs.brew-api.follows = "brew-api";
-    brew-nix.inputs.nixpkgs.follows = "nixpkgs";
-    brew-api.url = "github:BatteredBunny/brew-api";
-    brew-api.flake = false;
-
     # VSCode
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
@@ -66,10 +51,6 @@
     # Android
     android.url = "github:tadfisher/android-nixpkgs/stable";
     android.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Matugen
-    matugen.url = "github:/InioX/Matugen";
-    matugen.inputs.nixpkgs.follows = "nixpkgs";
 
     # Dank Material Shell
     dgop.url = "github:AvengeMedia/dgop";
@@ -81,19 +62,12 @@
   };
 
   outputs =
-    inputs@{
-      nixpkgs,
-      nix-darwin,
-      ...
-    }:
+    inputs@{ nixpkgs, ... }:
     {
-      # nixOS
-      nixosConfigurations.default =
+      # Desktop
+      nixosConfigurations.desktop =
         let
           system.triple = "x86_64-linux";
-          system.isDarwin = false;
-          system.isLinux = true;
-
           default = import ./utilities/default.nix {
             inherit system;
             pkgs = nixpkgs.legacyPackages.${system.triple};
@@ -103,27 +77,24 @@
           system = system.triple;
           specialArgs = { inherit default inputs system; };
           modules = [
-            ./configuration.${system.triple}.nix
+            ./configuration/${system.triple}.nix
           ];
         };
 
-      # macOS
-      darwinConfigurations.default =
+      # Notebook
+      nixosConfigurations.notebook =
         let
-          system.triple = "aarch64-darwin";
-          system.isDarwin = true;
-          system.isLinux = false;
-
+          system.triple = "aarch64-linux";
           default = import ./utilities/default.nix {
             inherit system;
             pkgs = nixpkgs.legacyPackages.${system.triple};
           };
         in
-        nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
+        nixpkgs.lib.nixosSystem {
+          system = system.triple;
           specialArgs = { inherit default inputs system; };
           modules = [
-            ./configuration.${system.triple}.nix
+            ./configuration/${system.triple}.nix
           ];
         };
     };

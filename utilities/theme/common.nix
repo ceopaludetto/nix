@@ -1,20 +1,9 @@
-{
-  config,
-  inputs,
-  osConfig,
-  system,
-  ...
-}:
+{ config, ... }:
 let
   templates = ../../assets/templates;
-  homeDirectory =
-    if system.isDarwin then osConfig.user.users.carlos.home else config.home.homeDirectory;
+  homeDirectory = config.home.homeDirectory;
 in
 {
-  imports = [
-    inputs.matugen.nixosModules.default
-  ];
-
   xdg.configFile."matugen/config.toml".text = ''
     [config]
 

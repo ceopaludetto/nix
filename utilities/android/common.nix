@@ -41,17 +41,15 @@ let
     ++ lib.optionals (system.triple == "x86_64-linux") [
       system-images-android-36-google-apis-playstore-x86-64
     ]
-    ++ lib.optionals (system.triple == "aarch64-darwin") [
+    ++ lib.optionals (system.triple == "aarch64-linux") [
       system-images-android-36-google-apis-playstore-arm64-v8a
     ]
   );
 in
 {
-  home.packages = [
+  home.packages = with pkgs; [
+    android-studio
     android.sdk
-  ]
-  ++ lib.optionals (system.triple == "x86_64-linux") [
-    pkgs.android-studio
   ];
 
   home.file.${android.path}.source = "${android.sdk}/share/android-sdk";

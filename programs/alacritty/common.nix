@@ -10,6 +10,9 @@
   programs.alacritty.settings.font.normal.family = default.fonts.mono.name;
   programs.alacritty.settings.font.size = default.fonts.size;
 
+  # Window decorations
+  programs.alacritty.settings.window.decorations = "None";
+
   # Theme
   programs.alacritty.settings.general.import = [
     (builtins.toString "./dank-theme.toml")

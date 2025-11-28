@@ -1,4 +1,11 @@
-{ pkgs, system, ... }:
+{
+  config,
+  default,
+  lib,
+  pkgs,
+  system,
+  ...
+}:
 {
   imports = [
     # Applications
@@ -8,6 +15,10 @@
     ../programs/vscode/${system.triple}.nix
     ../programs/yaak/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
+
+    # Shell
+    ../programs/niri/${system.triple}.nix
+    ../programs/material-shell/${system.triple}.nix
 
     # Utilities
     ../utilities/accounts/${system.triple}.nix
@@ -143,4 +154,50 @@
   programs.direnv.enableZshIntegration = true;
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.mise.enable = true;
+
+  # Home directory
+  home.homeDirectory = lib.mkForce /home/carlos;
+
+  # XDG
+  xdg.userDirs.enable = true;
+
+  # GTK
+  gtk.enable = true;
+  gtk.colorScheme = "dark";
+
+  gtk.theme.package = pkgs.adw-gtk3;
+  gtk.theme.name = "adw-gtk3-dark";
+
+  gtk.font.name = default.fonts.sans.name;
+  gtk.font.size = default.fonts.size;
+
+  # Link dank shell to GTK
+  xdg.configFile."gtk-4.0/gtk.css".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/gtk-4.0/dank-colors.css";
+  xdg.configFile."gtk-3.0/gtk.css".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/gtk-3.0/dank-colors.css";
+
+  gtk.iconTheme.package = pkgs.tela-circle-icon-theme.override { colorVariants = [ "black" ]; };
+  gtk.iconTheme.name = "Tela-circle-black-dark";
+
+  # Cursor
+  home.pointerCursor.enable = true;
+  home.pointerCursor.gtk.enable = true;
+  home.pointerCursor.name = "Bibata-Modern-Classic";
+  home.pointerCursor.package = pkgs.bibata-cursors;
+  home.pointerCursor.size = 24;
+
+  # Dconf settings
+  dconf.settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  dconf.settings."org/gnome/desktop/wm/preferences".button-layout = ":";
+
+  # QT
+  qt.enable = true;
+  qt.platformTheme.name = "gtk3";
+
+  # Wallpapers
+  home.file."${config.xdg.userDirs.pictures}/Wallpapers" = {
+    source = ../assets/wallpapers;
+    recursive = true;
+  };
 }

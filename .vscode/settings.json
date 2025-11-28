@@ -11,10 +11,10 @@
 			},
 			"options": {
         "nixos": {
-          "expr": "(builtins.getFlake \"${workspaceFolder}/.\").nixosConfigurations.default.options",
+          "expr": "(builtins.getFlake \"${workspaceFolder}/.\").nixosConfigurations.desktop.options",
         },
 			  "home-manager": {
-          "expr": "(builtins.getFlake \"${workspaceFolder}/.\").nixosConfigurations.default.options.home-manager.users.type.getSubOptions []",
+          "expr": "(builtins.getFlake \"${workspaceFolder}/.\").nixosConfigurations.desktop.options.home-manager.users.type.getSubOptions []",
         },
       },
     },

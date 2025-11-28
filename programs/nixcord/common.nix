@@ -30,4 +30,11 @@
     	--top-bar-height: 16px;
     }
   '';
+
+  # Use Vesktop instead of Discord
+  programs.nixcord.discord.enable = false;
+  programs.nixcord.vesktop.enable = true;
+
+  # Frameless for Niri
+  programs.nixcord.config.frameless = true;
 }
