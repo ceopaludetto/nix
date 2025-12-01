@@ -114,6 +114,7 @@ in
     };
     Preferences = mkLockedAttrs {
       "widget.use-xdg-desktop-portal.file-picker" = 1;
+      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
     };
   };
 

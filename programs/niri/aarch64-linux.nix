@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   imports = [
     ./common.nix
@@ -17,5 +17,23 @@
     outputs."eDP-1".position.x = 0;
     outputs."eDP-1".position.y = 0;
     outputs."eDP-1".focus-at-startup = true;
+
+    binds = with config.lib.niri.actions; {
+      # Screen brightness
+      "XF86MonBrightnessUp".action =
+        spawn "dms" "ipc" "call" "brightness" "increment" "5"
+          "backlight:apple-panel-bl";
+      "XF86MonBrightnessDown".action =
+        spawn "dms" "ipc" "call" "brightness" "decrement" "5"
+          "backlight:apple-panel-bl";
+
+      # Keyboard brightness
+      "Alt+XF86MonBrightnessUp".action =
+        spawn "dms" "ipc" "call" "brightness" "increment" "5"
+          "leds:kbd_backlight";
+      "Alt+XF86MonBrightnessDown".action =
+        spawn "dms" "ipc" "call" "brightness" "decrement" "5"
+          "leds:kbd_backlight";
+    };
   };
 }

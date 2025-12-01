@@ -97,10 +97,12 @@ in
       "Mod+Space".action = spawn "dms" "ipc" "call" "spotlight" "toggle";
       "Mod+Slash".action = spawn "dms" "ipc" "call" "keybinds" "toggle" "niri";
 
-      # Screenshot
+      # Screenshot (both PrtScreen and S supported)
       "Print".action = spawn "dms" "ipc" "call" "niri" "screenshotWindow";
       "Mod+Print".action = spawn "dms" "ipc" "call" "niri" "screenshotScreen";
+      "Mod+S".action = spawn "dms" "ipc" "call" "niri" "screenshotScreen";
       "Mod+Shift+Print".action = spawn "dms" "ipc" "call" "niri" "screenshot";
+      "Mod+Shift+S".action = spawn "dms" "ipc" "call" "niri" "screenshot";
 
       # Applications
       "Mod+Q".action = close-window;
@@ -166,6 +168,15 @@ in
         ];
         open-on-output = "HDMI-A-1";
       }
+    ];
+
+    # Lock on lid close
+    switch-events.lid-close.action.spawn = [
+      "dms"
+      "ipc"
+      "call"
+      "lock"
+      "lock"
     ];
 
     # Environment variables
