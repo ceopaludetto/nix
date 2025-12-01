@@ -9,7 +9,7 @@ in
 
     [templates.vscode]
     input_path = "${templates}/vscode/theme.json"
-    output_path = "${homeDirectory}/.config/vscode-oss/themes/matugen.json"
+    output_path = "${homeDirectory}/.config/vscode/themes/matugen.json"
 
     [templates.zen-browser-user-chrome]
     input_path = "${templates}/zen-browser/user-chrome.css"

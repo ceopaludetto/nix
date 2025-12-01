@@ -193,7 +193,8 @@
 
     # Programs
     jetbrains.idea-ultimate
-    slack
+    (callPackage ../utilities/packages/riff.nix { })
+    # slack
 
     # Nix related
     home-manager
@@ -241,13 +242,20 @@
   programs.dankMaterialShell.greeter.configHome = config.home-manager.users.carlos.home.homeDirectory;
   programs.dankMaterialShell.greeter.compositor.name = "niri";
   programs.dankMaterialShell.greeter.compositor.customConfig =
-    with config.home-manager.users.carlos.home; ''
+    with config.home-manager.users.carlos.home;
+    ''
       cursor { xcursor-theme "${pointerCursor.name}"; xcursor-size ${builtins.toString pointerCursor.size}; }
       environment { "DMS_RUN_GREETER" "1"; }
       gestures { hot-corners { off; }; }
       hotkey-overlay { skip-at-startup; }
+    ''
+    + lib.optionalString (system.triple == "x86_64-linux") ''
       output "DP-2" { transform "normal"; position x=0 y=0; mode "2560x1440@165.0"; focus-at-startup; }
       output "HDMI-A-1" { transform "90"; position x=2560 y=-820; mode "2560x1440@144.0"; }
+    ''
+    + lib.optionalString (system.triple == "aarch64-linux") ''
+      output "eDP-1" { transform "normal"; position x=0 y=0; mode "3456x2160@60.0"; focus-at-startup; }
+      debug { render-drm-device "/dev/dri/renderD128"; }
     '';
 
   # Gnome keyring

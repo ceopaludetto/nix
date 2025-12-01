@@ -1,9 +1,10 @@
 keys:
-  - &nix age1qm063k99wunvsfnjtn6jepgs77lkmnej0wth7mpatetuef00s58sjnxks4
-  # TODO: add darwin pub key
+  - &desktop age1qm063k99wunvsfnjtn6jepgs77lkmnej0wth7mpatetuef00s58sjnxks4
+  - &notebook age199jfn0y2844zgenzaxduqj3zgz7vag88vd78gqcf0d20ddhjfsys0p58hx
 
 creation_rules:
   - path_regex: /dev/stdin
     key_groups:
     - age:
-      - *nix
+      - *desktop
+      - *notebook

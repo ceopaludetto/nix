@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Unlock bitwarden
 echo "Unlocking Bitwarden Vault..."
-BW_SESSION=$(bw unlock --raw)
+export BW_SESSION=$(bw unlock --raw)
 
 # Sync vault
 echo "Syncing Bitwarden Vault..."
@@ -13,7 +13,7 @@ bw sync
 echo "Generating secrets..."
 CONTENT=$(opsops render --input .sops.generate.yaml)
 
-if [ "$1" == "--print" ]; then
+if [ "${1:-}" == "--print" ] && [ "$1" == "--print" ]; then
 	echo "$CONTENT"
 fi
 

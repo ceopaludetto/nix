@@ -10,8 +10,11 @@
 				"expr": "import (builtins.getFlake \"${workspaceFolder}/.\").inputs.nixpkgs { }"
 			},
 			"options": {
-        "nixos": {
+        "desktop": {
           "expr": "(builtins.getFlake \"${workspaceFolder}/.\").nixosConfigurations.desktop.options",
+        },
+				"notebook": {
+          "expr": "(builtins.getFlake \"${workspaceFolder}/.\").nixosConfigurations.notebook.options",
         },
 			  "home-manager": {
           "expr": "(builtins.getFlake \"${workspaceFolder}/.\").nixosConfigurations.desktop.options.home-manager.users.type.getSubOptions []",

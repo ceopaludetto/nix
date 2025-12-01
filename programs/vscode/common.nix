@@ -3,7 +3,6 @@
   default,
   lib,
   pkgs,
-  system,
   ...
 }:
 rec {
@@ -25,7 +24,6 @@ rec {
     graphql.vscode-graphql-syntax
     jnoortheen.nix-ide
     mikestead.dotenv
-    mkhl.direnv
     naumovs.color-highlight
 
     # Remote development
@@ -41,131 +39,126 @@ rec {
     })
   ];
 
-  programs.vscode.profiles.default.userSettings = lib.mkMerge [
-    {
-      # Vim
-      "vim.leader" = "<space>";
-      "vim.camelCaseMotion.enable" = true;
-      "vim.useSystemClipboard" = false;
-      "vim.handleKeys" = {
-        "<C-a>" = false;
-        "<C-c>" = false;
-        "<C-f>" = false;
-        "<C-p>" = false;
-        "<C-s>" = false;
-        "<C-v>" = false;
-        "<C-x>" = false;
-        "<C-z>" = false;
-      };
+  programs.vscode.profiles.default.userSettings = {
+    # Vim
+    "vim.leader" = "<space>";
+    "vim.camelCaseMotion.enable" = true;
+    "vim.useSystemClipboard" = false;
+    "vim.handleKeys" = {
+      "<C-a>" = false;
+      "<C-c>" = false;
+      "<C-f>" = false;
+      "<C-p>" = false;
+      "<C-s>" = false;
+      "<C-v>" = false;
+      "<C-x>" = false;
+      "<C-z>" = false;
+    };
 
-      # Devcontainer
-      "dev.containers.dockerSocketPath" = "unix:///run/user/1000/podman/podman.sock";
-      "dev.containers.dockerPath" = "podman";
-      "dev.containers.dockerComposePath" = "podman-compose";
+    # Devcontainer
+    "dev.containers.dockerSocketPath" = "unix:///run/user/1000/podman/podman.sock";
+    "dev.containers.dockerPath" = "podman";
+    "dev.containers.dockerComposePath" = "podman-compose";
 
-      # Security
-      "security.workspace.trust.untrustedFiles" = "open";
+    # Security
+    "security.workspace.trust.untrustedFiles" = "open";
 
-      # Chat
-      "chat.commandCenter.enabled" = false;
+    # Chat
+    "chat.commandCenter.enabled" = false;
 
-      # Workbench
-      "workbench.productIconTheme" = "icons-carbon";
-      "workbench.iconTheme" = lib.mkForce "bearded-icons";
-      "workbench.colorTheme" = lib.mkForce "Dynamic Base16 DankShell";
-      "workbench.settings.editor" = "json";
-      "workbench.startupEditor" = "none";
-      "workbench.editor.limit.enabled" = true;
-      "workbench.editor.limit.value" = 10;
-      "workbench.tree.indent" = 20;
-      "workbench.layoutControl.enabled" = false;
+    # Workbench
+    "workbench.productIconTheme" = "icons-carbon";
+    "workbench.iconTheme" = lib.mkForce "bearded-icons";
+    "workbench.colorTheme" = lib.mkForce "Dynamic Base16 DankShell";
+    "workbench.settings.editor" = "json";
+    "workbench.startupEditor" = "none";
+    "workbench.editor.limit.enabled" = true;
+    "workbench.editor.limit.value" = 10;
+    "workbench.tree.indent" = 20;
+    "workbench.layoutControl.enabled" = false;
 
-      # Explorer
-      "explorer.confirmDragAndDrop" = false;
-      "explorer.confirmDelete" = false;
-      "explorer.confirmPasteNative" = false;
+    # Explorer
+    "explorer.confirmDragAndDrop" = false;
+    "explorer.confirmDelete" = false;
+    "explorer.confirmPasteNative" = false;
 
-      # Window
-      "window.titleBarStyle" = "custom";
-      "window.title" = "\${appName}\${separator}\${rootNameShort}";
-      "window.commandCenter" = true;
-      "window.dialogStyle" = "native";
-      "window.newWindowDimensions" = "maximized";
-      "window.zoomLevel" = 1;
+    # Window
+    "window.titleBarStyle" = "native";
+    "window.title" = "\${appName}\${separator}\${rootNameShort}";
+    "window.commandCenter" = true;
+    "window.dialogStyle" = "native";
+    "window.newWindowDimensions" = "maximized";
+    "window.zoomLevel" = 1;
+    "window.menuBarVisibility" = "hidden";
+    "window.customTitleBarVisibility" = "auto";
 
-      # Error lens
-      "errorLens.followCursor" = "activeLine";
-      "errorLens.messageTemplate" = "$message ($source/$code)";
-      "errorLens.messageBackgroundMode" = "message";
-      "errorLens.padding" = "2px 4px";
-      "errorLens.margin" = "1ch";
+    # Error lens
+    "errorLens.followCursor" = "activeLine";
+    "errorLens.messageTemplate" = "$message ($source/$code)";
+    "errorLens.messageBackgroundMode" = "message";
+    "errorLens.padding" = "2px 4px";
+    "errorLens.margin" = "1ch";
 
-      "extensions.ignoreRecommendations" = true;
+    "extensions.ignoreRecommendations" = true;
 
-      # Editor
-      "editor.acceptSuggestionOnEnter" = "on";
-      "editor.codeActionsOnSave" = {
-        "source.fixAll" = "explicit";
-      };
-      "editor.cursorBlinking" = "solid";
-      "editor.cursorSmoothCaretAnimation" = "on";
-      "editor.defaultColorDecorators" = "auto";
-      "editor.fontLigatures" = true;
-      "editor.inlineSuggest.enabled" = true;
-      "editor.insertSpaces" = false;
-      "editor.inlayHints.enabled" = "offUnlessPressed";
-      "editor.minimap.renderCharacters" = false;
-      "editor.rulers" = [
-        80
-        120
-      ];
-      "editor.suggest.selectionMode" = "always";
-      "editor.tabSize" = 2;
-      "editor.stickyScroll.enabled" = false;
-      "editor.quickSuggestions" = {
-        "strings" = "on";
-      };
-      "editor.bracketPairColorization.enabled" = false;
+    # Editor
+    "editor.acceptSuggestionOnEnter" = "on";
+    "editor.codeActionsOnSave" = {
+      "source.fixAll" = "explicit";
+    };
+    "editor.cursorBlinking" = "solid";
+    "editor.cursorSmoothCaretAnimation" = "on";
+    "editor.defaultColorDecorators" = "auto";
+    "editor.fontLigatures" = true;
+    "editor.inlineSuggest.enabled" = true;
+    "editor.insertSpaces" = false;
+    "editor.inlayHints.enabled" = "offUnlessPressed";
+    "editor.minimap.renderCharacters" = false;
+    "editor.rulers" = [
+      80
+      120
+    ];
+    "editor.suggest.selectionMode" = "always";
+    "editor.tabSize" = 2;
+    "editor.stickyScroll.enabled" = false;
+    "editor.quickSuggestions" = {
+      "strings" = "on";
+    };
+    "editor.bracketPairColorization.enabled" = false;
 
-      # Debug
-      "debug.toolBarLocation" = "commandCenter";
+    # Debug
+    "debug.toolBarLocation" = "commandCenter";
 
-      # Breadcrumbs
-      "breadcrumbs.enabled" = false;
+    # Breadcrumbs
+    "breadcrumbs.enabled" = false;
 
-      # Terminal
-      "terminal.integrated.cursorBlinking" = false;
-      "terminal.integrated.cursorStyle" = "underline";
-      "terminal.integrated.enableMultiLinePasteWarning" = "never";
-      "terminal.integrated.tabs.enabled" = false;
-      "terminal.integrated.stickyScroll.enabled" = false;
+    # Terminal
+    "terminal.integrated.cursorBlinking" = false;
+    "terminal.integrated.cursorStyle" = "underline";
+    "terminal.integrated.enableMultiLinePasteWarning" = "never";
+    "terminal.integrated.tabs.enabled" = false;
+    "terminal.integrated.stickyScroll.enabled" = false;
 
-      # Telemetry
-      "telemetry.telemetryLevel" = "off";
+    # Telemetry
+    "telemetry.telemetryLevel" = "off";
 
-      "chat.disableAIFeatures" = true;
+    "chat.disableAIFeatures" = true;
 
-      # Font configuration
-      "markdown.preview.fontSize" = default.fonts.size;
-      "chat.editor.fontSize" = default.fonts.size;
-      "debug.console.fontSize" = default.fonts.size;
-      "editor.fontSize" = default.fonts.size;
-      "terminal.integrated.fontSize" = default.fonts.size;
+    # Font configuration
+    "markdown.preview.fontSize" = default.fonts.size;
+    "chat.editor.fontSize" = default.fonts.size;
+    "debug.console.fontSize" = default.fonts.size;
+    "editor.fontSize" = default.fonts.size;
+    "terminal.integrated.fontSize" = default.fonts.size;
 
-      # Nix configuration
-      "nix.enableLanguageServer" = true;
-      "nix.serverPath" = "nixd";
-      "nix.formatterPath" = "nixfmt";
+    # Nix configuration
+    "nix.enableLanguageServer" = true;
+    "nix.serverPath" = "nixd";
+    "nix.formatterPath" = "nixfmt";
 
-      "[nix]"."editor.defaultFormatter" = "jnoortheen.nix-ide";
-      "[nix]"."editor.formatOnSave" = true;
-    }
-    (lib.optionals (system.triple == "x86_64-linux") {
-      "window.menuBarVisibility" = "hidden";
-      "window.customTitleBarVisibility" = "auto";
-      "window.titleBarStyle" = lib.mkForce "native";
-    })
-  ];
+    "[nix]"."editor.defaultFormatter" = "jnoortheen.nix-ide";
+    "[nix]"."editor.formatOnSave" = true;
+  };
 
   # Rust
   programs.vscode.profiles."Rust".extensions =
@@ -176,18 +169,15 @@ rec {
     ]
     ++ programs.vscode.profiles.default.extensions;
 
-  programs.vscode.profiles."Rust".userSettings = lib.mkMerge [
-    programs.vscode.profiles.default.userSettings
-    {
-      # Rust
-      "[rust]"."editor.defaultFormatter" = "rust-lang.rust-analyzer";
-      "[rust]"."editor.formatOnSave" = true;
+  programs.vscode.profiles."Rust".userSettings = programs.vscode.profiles.default.userSettings // {
+    # Rust
+    "[rust]"."editor.defaultFormatter" = "rust-lang.rust-analyzer";
+    "[rust]"."editor.formatOnSave" = true;
 
-      # TOML
-      "[toml]"."editor.defaultFormatter" = "tamasfe.even-better-toml";
-      "[toml]"."editor.formatOnSave" = true;
-    }
-  ];
+    # TOML
+    "[toml]"."editor.defaultFormatter" = "tamasfe.even-better-toml";
+    "[toml]"."editor.formatOnSave" = true;
+  };
 
   # Swift
   programs.vscode.profiles."Swift".extensions =
@@ -198,13 +188,10 @@ rec {
     ]
     ++ programs.vscode.profiles.default.extensions;
 
-  programs.vscode.profiles."Swift".userSettings = lib.mkMerge [
-    programs.vscode.profiles.default.userSettings
-    {
-      "[swift]"."editor.defaultFormatter" = "swiftlang.swift-vscode";
-      "[swift]"."editor.formatOnSave" = true;
-    }
-  ];
+  programs.vscode.profiles."Swift".userSettings = programs.vscode.profiles.default.userSettings // {
+    "[swift]"."editor.defaultFormatter" = "swiftlang.swift-vscode";
+    "[swift]"."editor.formatOnSave" = true;
+  };
 
   # Typescript
   programs.vscode.profiles."TypeScript".extensions =
@@ -214,9 +201,9 @@ rec {
     ]
     ++ programs.vscode.profiles.default.extensions;
 
-  programs.vscode.profiles."TypeScript".userSettings = lib.mkMerge [
+  programs.vscode.profiles."TypeScript".userSettings =
     programs.vscode.profiles.default.userSettings
-    {
+    // {
       "javascript.updateImportsOnFileMove.enabled" = "never";
       "javascript.preferences.importModuleSpecifier" = "shortest";
       "javascript.preferences.importModuleSpecifierEnding" = "minimal";
@@ -224,8 +211,7 @@ rec {
       "typescript.updateImportsOnFileMove.enabled" = "never";
       "typescript.preferences.importModuleSpecifier" = "shortest";
       "typescript.preferences.importModuleSpecifierEnding" = "minimal";
-    }
-  ];
+    };
 
   # Dart
   programs.vscode.profiles."Dart".extensions =
@@ -236,13 +222,10 @@ rec {
     ]
     ++ programs.vscode.profiles.default.extensions;
 
-  programs.vscode.profiles."Dart".userSettings = lib.mkMerge [
-    programs.vscode.profiles.default.userSettings
-    {
-      "[dart]"."editor.defaultFormatter" = "Dart-Code.flutter";
-      "[dart]"."editor.formatOnSave" = true;
-    }
-  ];
+  programs.vscode.profiles."Dart".userSettings = programs.vscode.profiles.default.userSettings // {
+    "[dart]"."editor.defaultFormatter" = "Dart-Code.flutter";
+    "[dart]"."editor.formatOnSave" = true;
+  };
 
   # Writing
   programs.vscode.profiles."Writing".extensions =
@@ -252,13 +235,10 @@ rec {
     ]
     ++ programs.vscode.profiles.default.extensions;
 
-  programs.vscode.profiles."Writing".userSettings = lib.mkMerge [
-    programs.vscode.profiles.default.userSettings
-    {
-      "[typst]"."editor.defaultFormatter" = "myriad-dreamin.tinymist";
-      "[typst]"."editor.formatOnSave" = true;
-    }
-  ];
+  programs.vscode.profiles."Writing".userSettings = programs.vscode.profiles.default.userSettings // {
+    "[typst]"."editor.defaultFormatter" = "myriad-dreamin.tinymist";
+    "[typst]"."editor.formatOnSave" = true;
+  };
 
   # Vue (based on TypeScript)
   programs.vscode.profiles."Vue".extensions =
@@ -268,8 +248,6 @@ rec {
     ]
     ++ programs.vscode.profiles."TypeScript".extensions;
 
-  programs.vscode.profiles."Vue".userSettings = lib.mkMerge [
-    programs.vscode.profiles."TypeScript".userSettings
-    { }
-  ];
+  programs.vscode.profiles."Vue".userSettings =
+    programs.vscode.profiles."TypeScript".userSettings // { };
 }

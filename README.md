@@ -1,13 +1,21 @@
-# My NixOS and NixDarwin dot files
+# My NixOS dot files
 
-Flake based configuration of NixOS and NixDarwin.
+Flake based configuration of NixOS.
 
-## Theming
+## Features
 
-- Catppuccin Mocha (Lavender) 
-- Papirus Catppuccin (on Linux)
-- Monaspace Neon Nerd Font
+- Dank Material Shell + Niri;
+- Roboto Condensed && Monaspace Neon NF;
+- Alacritty (zsh + starship);
+- SOPS secrets (fetching from BitWarden).
 
-## Wallpaper
+## Wallpapers
 
-Blue Distortion 2 from [Raycast Wallpapers](https://www.raycast.com/wallpapers)
+[Raycast Wallpapers](https://www.raycast.com/wallpapers):
+- Blue Distortion 2;
+- Chromatic Light 1
+- Red Distortion 2;
+
+[Wallhaven](https://wallhaven.cc):
+- Makima;
+- Windows 11 Black;

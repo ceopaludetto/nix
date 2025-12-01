@@ -11,7 +11,6 @@
     # Applications
     ../programs/alacritty/${system.triple}.nix
     ../programs/nixcord/${system.triple}.nix
-    ../programs/spicetify/${system.triple}.nix
     ../programs/vscode/${system.triple}.nix
     ../programs/yaak/${system.triple}.nix
     ../programs/zen-browser/${system.triple}.nix
@@ -22,7 +21,7 @@
 
     # Utilities
     ../utilities/accounts/${system.triple}.nix
-    ../utilities/android/${system.triple}.nix
+    # ../utilities/android/${system.triple}.nix
     ../utilities/theme/${system.triple}.nix
   ];
 
@@ -148,12 +147,6 @@
 
   # JQ
   programs.jq.enable = true;
-
-  # Direnv
-  programs.direnv.enable = true;
-  programs.direnv.enableZshIntegration = true;
-  programs.direnv.nix-direnv.enable = true;
-  programs.direnv.mise.enable = true;
 
   # Home directory
   home.homeDirectory = lib.mkForce /home/carlos;
