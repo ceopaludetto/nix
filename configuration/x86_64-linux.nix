@@ -141,4 +141,8 @@ in
 
   # Configure console keymap
   console.keyMap = "us-acentos";
+
+  environment.systemPackages = with pkgs; [
+    slack
+  ];
 }

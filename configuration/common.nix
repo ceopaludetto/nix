@@ -194,7 +194,6 @@
     # Programs
     jetbrains.idea-ultimate
     (callPackage ../utilities/packages/riff.nix { })
-    # slack
 
     # Nix related
     home-manager
