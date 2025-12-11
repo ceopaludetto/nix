@@ -153,6 +153,7 @@
 
   # XDG
   xdg.userDirs.enable = true;
+  xdg.userDirs.createDirectories = true;
 
   # GTK
   gtk.enable = true;

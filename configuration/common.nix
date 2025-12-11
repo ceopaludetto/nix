@@ -271,4 +271,7 @@
     obs-pipewire-audio-capture # Pipewire audio capture
     obs-vaapi # AMD hardware acceleration
   ];
+
+  # Disable Niri default polkit
+  systemd.user.services.niri-flake-polkit.enable = false;
 }
