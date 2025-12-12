@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Diegovsky";
     repo = "riff";
     rev = "refs/tags/${version}";
-    hash = "sha256-F7kIdxnNNghHlxq1Yl6BJ7v1fmictErW5UJTHRdtfIs=";
+    hash = "sha256-j5PZXXGInA03V3Lfu+QUgeHw8583XvJZyW67VcDe980=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

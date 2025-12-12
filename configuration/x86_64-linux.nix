@@ -37,7 +37,7 @@ in
   ];
 
   # State version
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.11";
 
   # Bootloader
   boot.loader.systemd-boot.enable = lib.mkForce false;
@@ -144,5 +144,8 @@ in
 
   environment.systemPackages = with pkgs; [
     slack
+
+    # Used by bt-dualboot
+    chntpw
   ];
 }
