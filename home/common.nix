@@ -21,7 +21,7 @@
 
     # Utilities
     ../utilities/accounts/${system.triple}.nix
-    # ../utilities/android/${system.triple}.nix
+    ../utilities/android/${system.triple}.nix
     ../utilities/theme/${system.triple}.nix
   ];
 
@@ -194,4 +194,8 @@
     source = ../assets/wallpapers;
     recursive = true;
   };
+
+  # SSH Agent
+  services.ssh-agent.enable = true;
+  services.ssh-agent.enableZshIntegration = true;
 }

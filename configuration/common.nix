@@ -121,10 +121,10 @@
     description = "Carlos Paludetto";
     extraGroups = [
       "adbusers"
+      "docker"
       "greeter"
       "kvm"
       "networkmanager"
-      "podman"
       "wheel"
     ];
   };
@@ -132,13 +132,9 @@
   # SSH server
   services.openssh.enable = true;
 
-  # Podman
+  # Docker
   virtualisation.containers.enable = true;
-  virtualisation.podman.enable = true;
-  virtualisation.podman.extraPackages = with pkgs; [ virtiofsd ];
-  virtualisation.podman.dockerCompat = true;
-  virtualisation.podman.dockerSocket.enable = true; # Mimic docker socket.
-  virtualisation.podman.defaultNetwork.settings.dns_enabled = true; # Required for containers under podman-compose to be able to talk to each other.
+  virtualisation.docker.enable = true;
 
   # ADB (Android Device Bridge)
   programs.adb.enable = true;
