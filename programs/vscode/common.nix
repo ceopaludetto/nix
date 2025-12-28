@@ -28,14 +28,13 @@ rec {
 
     # Remote development
     ms-vscode-remote.remote-containers
-    ms-vscode-remote.remote-ssh
 
     # Vim
     vscodevim.vim
 
     # Theme
     (pkgs.callPackage ./utilities/theme.nix {
-      homeDirectory = builtins.toString config.home.homeDirectory;
+      homeDirectory = toString config.home.homeDirectory;
     })
   ];
 
@@ -54,11 +53,6 @@ rec {
       "<C-x>" = false;
       "<C-z>" = false;
     };
-
-    # Devcontainer
-    "dev.containers.dockerSocketPath" = "unix:///run/user/1000/podman/podman.sock";
-    "dev.containers.dockerPath" = "podman";
-    "dev.containers.dockerComposePath" = "podman-compose";
 
     # Security
     "security.workspace.trust.untrustedFiles" = "open";
@@ -197,6 +191,7 @@ rec {
   programs.vscode.profiles."TypeScript".extensions =
     with pkgs.vscode-marketplace;
     [
+      bradlc.vscode-tailwindcss
       dbaeumer.vscode-eslint
     ]
     ++ programs.vscode.profiles.default.extensions;
